@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    { "source": "/", "destination": "/try.html" },
+    { "source": "/try", "destination": "/try.html" },
+    { "source": "/try/", "destination": "/try.html" },
+    { "source": "/try/cta", "destination": "/cta.html" },
+    { "source": "/try/cta/", "destination": "/cta.html" },
+    { "source": "/api-wa-pic.php", "destination": "/api/wa-pic" },
+    { "source": "/api-wa.php", "destination": "/api/wa-pic" },
+    { "source": "/_f/e", "destination": "/api/fe" }
+  ]
+}
