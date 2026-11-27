@@ -6,7 +6,7 @@ Web mobile-first, HTML/CSS/JS puro, servida em localhost por um servidor Node se
 
 ## Stack
 
-HTML semântico, CSS com tokens, JavaScript progressivo e funcional offline para a simulação. O checkout continua externo na Payt. O player VSL e os depoimentos usam os smart players da ConverteAI quando a rede permite.
+HTML semântico, CSS com tokens, JavaScript progressivo e funcional offline para a simulação. O checkout continua externo na PerfectPay. O player VSL e os depoimentos usam os smart players da ConverteAI quando a rede permite.
 
 ## Usuários
 
@@ -14,7 +14,7 @@ Casais brasileiros, majoritariamente no celular, que chegam por anúncio de rede
 
 ## Propósito
 
-Clonar fielmente, para referência local, o funil `chavedoamor.site/try` → `/try/cta`. A entrada pede um número de WhatsApp e encena uma análise; a página de resultado apresenta um relatório simulado e vende o relatório completo por R$137, ancorado em R$197, via Payt/Pix.
+Clonar fielmente, para referência local, o funil `chavedoamor.site/try` → `/try/cta`. A entrada pede um número de WhatsApp e encena uma análise; a página de resultado apresenta um relatório simulado e vende o relatório completo por R$137, ancorado em R$197, via PerfectPay/Pix.
 
 ## Posicionamento
 
@@ -53,7 +53,7 @@ O domínio publicado está com a raiz em branco e os endpoints de scan em 404. A
 
 - Depoimentos, nomes, cidades, CNPJ, prazos de entrega por e-mail e canais de suporte.
 - Números novos de mensagens, fotos, áudios ou locais.
-- Mudança de preço, garantia, link Payt ou números de telefone reais.
+- Mudança de preço, garantia, link PerfectPay ou números de telefone reais.
 - Que o scan lê o WhatsApp de fato; o clone deve se apresentar como demonstração.
 
 ## Princípios
