@@ -798,6 +798,31 @@
         .disc-desc strong { color: #fff; }
 
         
+        .neutral-chat {
+            background: var(--card);
+            border: 1px solid var(--wa-light);
+            border-radius: 20px;
+            padding: 18px;
+            margin-bottom: 22px;
+            box-shadow: 0 8px 28px rgba(15,23,42,.06);
+        }
+        .neutral-chat-head { margin-bottom: 14px; }
+        .nc-tag {
+            display: inline-block;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+            color: var(--wa-dark);
+            background: rgba(37,211,102,.12);
+            border: 1px solid rgba(37,211,102,.3);
+            border-radius: 999px;
+            padding: 5px 9px;
+            margin-bottom: 8px;
+        }
+        .neutral-chat-head h3 { font-size: 17px; line-height: 1.3; color: var(--text); margin-bottom: 5px; }
+        .neutral-chat-head p { font-size: 12px; line-height: 1.5; color: var(--muted); }
+        .nc-note { font-size: 11px; line-height: 1.5; color: var(--muted); text-align: center; margin-top: 12px; }
         .wa-screen {
             border-radius: 16px;
             overflow: hidden;
@@ -1011,6 +1036,31 @@
         }
 
         
+        .phone-blur { filter: blur(4px); user-select: none; }
+        html { scroll-behavior: smooth; }
+        #checkout-btn { scroll-margin-top: 110px; }
+        .photo-cta {
+            position: absolute;
+            inset: 0;
+            z-index: 3;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            padding: 6px;
+            text-decoration: none;
+            background: linear-gradient(180deg, transparent 55%, rgba(11,20,26,.55));
+        }
+        .photo-cta span {
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: .03em;
+            text-transform: uppercase;
+            color: #fff;
+            background: rgba(37,211,102,.92);
+            border-radius: 999px;
+            padding: 4px 7px;
+            box-shadow: 0 2px 8px rgba(0,0,0,.25);
+        }
         .photos-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -1139,6 +1189,43 @@
             cursor: pointer;
             box-shadow: 0 4px 28px rgba(34,197,94,0.38);
             animation: checkoutPulse 2.5s ease-in-out infinite;
+        }
+        .inline-cta {
+            margin-top: 18px;
+            padding: 16px;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(37,211,102,.12), rgba(18,140,126,.06));
+            border: 1px solid rgba(37,211,102,.28);
+            border-radius: 16px;
+        }
+        .inline-cta p {
+            margin: 0 0 12px;
+            color: var(--text);
+            font-size: 14px;
+            font-weight: 700;
+            line-height: 1.4;
+        }
+        .inline-cta-link {
+            display: block;
+            width: 100%;
+            padding: 15px 14px;
+            color: #fff;
+            background: linear-gradient(135deg, #15803d, #22c55e);
+            border-radius: 14px;
+            box-shadow: 0 4px 20px rgba(34,197,94,.28);
+            font-size: 14px;
+            font-weight: 900;
+            letter-spacing: .03em;
+            line-height: 1.25;
+            text-align: center;
+            text-decoration: none;
+            text-transform: uppercase;
+        }
+        .inline-cta small {
+            display: block;
+            margin-top: 9px;
+            color: var(--muted);
+            font-size: 11px;
         }
         @keyframes checkoutPulse {
             0%   { box-shadow: 0 4px 28px rgba(34,197,94,0.38), 0 0 0 0 rgba(34,197,94,0.45); }
@@ -1445,6 +1532,57 @@
         </div>
     </div>
 
+    <div class="neutral-chat">
+        <div class="neutral-chat-head">
+            <span class="nc-tag">💬 Conversa encontrada</span>
+            <h3>O começo da conversa com o contato oculto</h3>
+            <p>Mensagens recuperadas pela IA. Leia e veja se parece com o seu esposo, sua esposa ou alguém que você conhece.</p>
+        </div>
+        <div class="wa-screen">
+            <div class="wa-statusbar">
+                <span>14:23</span>
+                <div style="display:flex;gap:4px;align-items:center;">
+                    <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+                    <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M2 22h20V2z M12 12V2.1C6.5 2.6 2.1 6.5 2 12h10z"/></svg>
+                    <svg width="22" height="12" fill="currentColor" viewBox="0 0 28 14"><rect x="0" y="1" width="22" height="12" rx="2" ry="2" stroke="currentColor" stroke-width="1" fill="none"/><rect x="2" y="3" width="14" height="8" rx="1" fill="currentColor"/><rect x="23" y="4" width="3" height="6" rx="1" fill="currentColor" opacity=".4"/></svg>
+                </div>
+            </div>
+            <div class="wa-topbar">
+                <div class="wa-topbar-back">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+                </div>
+                <div class="wa-topbar-avatar wa-dynamic-avatar" id="neutral-avatar">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                </div>
+                <div class="wa-topbar-info">
+                    <div class="wa-topbar-name phone-display phone-blur">+0000</div>
+                    <div class="wa-topbar-status">online agora</div>
+                </div>
+                <div class="wa-topbar-actions">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M15.6 11.6L22 7v10l-6.4-4.6M2 5h12a2 2 0 012 2v10a2 2 0 01-2 2H2V5z"/></svg>
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>
+                </div>
+            </div>
+            <div class="wa-chat-bg">
+                <div class="wa-bubble wa-bubble-in"><div class="wa-bubble-text">oi, chegou em casa?</div><div class="wa-bubble-time">21:12</div></div>
+                <div class="wa-bubble wa-bubble-out"><div class="wa-bubble-text">acabei de sair, te aviso quando chegar</div><div class="wa-bubble-time">21:13 <span class="wa-check">✓✓</span></div></div>
+                <div class="wa-bubble wa-bubble-in"><div class="wa-bubble-text">tava morrendo de saudade</div><div class="wa-bubble-time">21:14</div></div>
+                <div class="wa-bubble wa-bubble-out"><div class="wa-bubble-text">eu também… não devia 😅</div><div class="wa-bubble-time">21:15 <span class="wa-check">✓✓</span></div></div>
+                <div class="wa-bubble wa-bubble-in"><div class="wa-bubble-text">posso passar aí mais tarde?</div><div class="wa-bubble-time">22:41</div></div>
+                <div class="wa-bubble wa-bubble-out"><div class="wa-bubble-text">hoje não dá, tem gente em casa</div><div class="wa-bubble-time">22:43 <span class="wa-check">✓✓</span></div></div>
+                <div class="wa-bubble wa-bubble-in"><div class="wa-bubble-text">só um pouco, prometo</div><div class="wa-bubble-time">22:44</div></div>
+                <div class="wa-bubble wa-bubble-out"><div class="wa-bubble-text">você sabe que eu não consigo dizer não</div><div class="wa-bubble-time">22:46 <span class="wa-check">✓✓</span></div></div>
+            </div>
+        </div>
+        <p class="nc-note">A IA encontrou 218 mensagens nesta conversa. O restante está no relatório completo.</p>
+        <div class="inline-cta">
+            <p>Veja todas as mensagens recuperadas desta conversa.</p>
+            <a href="https://go.perfectpay.com.br/PPU38CQI2OU" class="inline-cta-link checkout-link" data-pos="conversa">DESBLOQUEAR CONVERSA COMPLETA</a>
+            <small>Acesso imediato e 100% anonimo</small>
+        </div>
+    </div>
+
     
     <div class="report-header">
         <p>
@@ -1539,6 +1677,11 @@
                 <span class="count">2</span> conversas arquivadas foram marcadas como <strong>suspeitas</strong>
             </div>
         </div>
+        <div class="inline-cta">
+            <p>Libere os detalhes de cada resultado encontrado.</p>
+            <a href="https://go.perfectpay.com.br/PPU38CQI2OU" class="inline-cta-link checkout-link" data-pos="resultados">VER RELATORIO COMPLETO</a>
+            <small>Mensagens, fotos, audios e localizacoes</small>
+        </div>
     </div>
 
     
@@ -1556,230 +1699,6 @@
 
     
     <div class="discoveries">
-
-        
-        <div class="discovery-item">
-            <div class="disc-alert-badge">
-                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/></svg>
-                MENSAGENS APAGADAS ENCONTRADAS
-            </div>
-            <div class="disc-header">
-                <h3 class="disc-title">
-                    Recuperamos <span class="accent">mensagens excluidas</span> do WhatsApp de <span class="phone-hi phone-display">+0000</span>
-                </h3>
-                <p class="disc-desc">
-                    Conversas que foram apagadas mas que <strong>nosso sistema conseguiu recuperar.</strong>
-                    <span class="phone-display">+0000</span> nao sabe que as temos.
-                </p>
-            </div>
-
-            
-            <div class="wa-screen">
-                
-                <div class="wa-statusbar">
-                    <span>14:23</span>
-                    <div style="display:flex;gap:4px;align-items:center;">
-                        <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
-                        <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M2 22h20V2z M12 12V2.1C6.5 2.6 2.1 6.5 2 12h10z"/></svg>
-                        <svg width="22" height="12" fill="currentColor" viewBox="0 0 28 14"><rect x="0" y="1" width="22" height="12" rx="2" ry="2" stroke="currentColor" stroke-width="1" fill="none"/><rect x="2" y="3" width="14" height="8" rx="1" fill="currentColor"/><rect x="23" y="4" width="3" height="6" rx="1" fill="currentColor" opacity=".4"/></svg>
-                    </div>
-                </div>
-
-                
-                <div class="wa-topbar">
-                    <div class="wa-topbar-back">
-                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
-                    </div>
-                    <div class="wa-topbar-avatar" id="wa-screen-avatar">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                    </div>
-                    <div class="wa-topbar-info">
-                        <div class="wa-topbar-name phone-display">+0000</div>
-                        <div class="wa-topbar-status">online</div>
-                    </div>
-                    <div class="wa-topbar-actions">
-                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M15.6 11.6L22 7v10l-6.4-4.6M2 5h12a2 2 0 012 2v10a2 2 0 01-2 2H2V5z"/></svg>
-                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
-                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>
-                    </div>
-                </div>
-
-                
-                <div class="wa-chat-bg wa-screen-blur">
-                    
-                    <div class="wa-bubble wa-bubble-in">
-                        <div class="wa-bubble-text">Nosso amor mais do com tanta saudade &#x1F60D;</div>
-                        <div class="wa-bubble-time">14:02</div>
-                    </div>
-                    
-                    <div class="wa-bubble wa-bubble-out">
-                        <div class="wa-bubble-text">Queria te ver de mais</div>
-                        <div class="wa-bubble-time">14:03 <span class="wa-check">&#10003;&#10003;</span></div>
-                    </div>
-                    
-                    <div class="wa-bubble wa-bubble-in">
-                        <div class="wa-bubble-text">Tambem to com muita saudade, mas voce sabe que nao da facil pra mim sair</div>
-                        <div class="wa-bubble-time">14:04</div>
-                    </div>
-                    
-                    <div class="wa-bubble wa-bubble-out">
-                        <div class="wa-bubble-text">Eu sei amor, mas da um jeito de vir me ver hoje &#x1F622;</div>
-                        <div class="wa-bubble-time">14:05 <span class="wa-check">&#10003;&#10003;</span></div>
-                    </div>
-                    
-                    <div class="wa-bubble wa-bubble-in" style="padding:0;">
-                        <div class="wa-audio-bubble">
-                            <div class="wa-audio-play">
-                                <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-                            </div>
-                            <div class="wa-audio-wave">
-                                <span style="height:6px"></span><span style="height:14px"></span><span style="height:8px"></span>
-                                <span style="height:18px"></span><span style="height:10px"></span><span style="height:4px"></span>
-                                <span style="height:16px"></span><span style="height:6px"></span><span style="height:12px"></span>
-                                <span style="height:8px"></span><span style="height:14px"></span><span style="height:4px"></span>
-                                <span style="height:10px"></span><span style="height:18px"></span><span style="height:6px"></span>
-                                <span style="height:12px"></span><span style="height:8px"></span>
-                            </div>
-                            <div class="wa-audio-avatar wa-dynamic-avatar">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                            </div>
-                        </div>
-                        <div class="wa-bubble-time" style="right:12px;">0:06 </div>
-                    </div>
-                    
-                    <div class="wa-bubble wa-bubble-out">
-                        <div class="wa-bubble-text">Vou dar um jeito, arrumar um tempinho aqui pra ir te ver logo &#x1F618;</div>
-                        <div class="wa-bubble-time">14:08 <span class="wa-check">&#10003;&#10003;</span></div>
-                    </div>
-                    
-                    <div class="wa-bubble wa-bubble-in">
-                        <div class="wa-bubble-text">Ta bom, estou te esperando &#x1F60D;&#x1F60D;&#x1F60D;&#x1F60D;</div>
-                        <div class="wa-bubble-time">14:09</div>
-                    </div>
-                    
-                    <div class="wa-bubble wa-bubble-in" style="padding:0;">
-                        <div class="wa-audio-bubble">
-                            <div class="wa-audio-play">
-                                <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-                            </div>
-                            <div class="wa-audio-wave">
-                                <span style="height:10px"></span><span style="height:4px"></span><span style="height:16px"></span>
-                                <span style="height:8px"></span><span style="height:12px"></span><span style="height:6px"></span>
-                                <span style="height:18px"></span><span style="height:10px"></span><span style="height:4px"></span>
-                                <span style="height:14px"></span><span style="height:8px"></span><span style="height:12px"></span>
-                                <span style="height:6px"></span>
-                            </div>
-                            <div class="wa-audio-avatar wa-dynamic-avatar">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                            </div>
-                        </div>
-                        <div class="wa-bubble-time" style="right:12px;">0:08</div>
-                    </div>
-                    
-                    <div class="wa-bubble wa-bubble-out">
-                        <div class="wa-bubble-text">Te amoooooo</div>
-                        <div class="wa-bubble-time">14:10 <span class="wa-check">&#10003;&#10003;</span></div>
-                    </div>
-                    
-                    <div class="wa-bubble wa-bubble-in">
-                        <div class="wa-bubble-text">Tambem te amor &#x2764;&#xFE0F;&#x1F525;</div>
-                        <div class="wa-bubble-time">14:11</div>
-                    </div>
-                    
-                    <div class="wa-emoji-row">
-                        &#x2764;&#xFE0F;&#x2764;&#xFE0F;&#x2764;&#xFE0F;&#x2764;&#xFE0F;&#x2764;&#xFE0F;
-                        <div class="wa-bubble-time"><span class="wa-check">&#10003;&#10003;</span></div>
-                    </div>
-
-                    
-                    <div class="wa-screen-overlay">
-                        <svg width="32" height="32" fill="none" stroke="rgba(255,255,255,0.8)" stroke-width="1.5" viewBox="0 0 24 24">
-                            <rect x="3" y="11" width="18" height="11" rx="2"/>
-                            <path d="M7 11V7a5 5 0 0110 0v4"/>
-                        </svg>
-                        <p>Conversa bloqueada</p>
-                    </div>
-                </div>
-
-                
-                <div style="background:#1F2C34;padding:8px 10px;display:flex;align-items:center;gap:8px;">
-                    <div style="background:#2A3942;flex:1;border-radius:20px;padding:8px 14px;display:flex;align-items:center;gap:8px;">
-                        <svg width="20" height="20" fill="none" stroke="#8696A0" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01"/></svg>
-                        <span style="font-size:13px;color:#8696A0;">Mensagem</span>
-                        <div style="margin-left:auto;display:flex;gap:14px;">
-                            <svg width="18" height="18" fill="none" stroke="#8696A0" stroke-width="1.5" viewBox="0 0 24 24"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>
-                            <svg width="18" height="18" fill="none" stroke="#8696A0" stroke-width="1.5" viewBox="0 0 24 24"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
-                        </div>
-                    </div>
-                    <div style="width:40px;height:40px;border-radius:50%;background:#00A884;display:flex;align-items:center;justify-content:center;">
-                        <svg width="20" height="20" fill="#fff" viewBox="0 0 24 24"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2M12 19v4M8 23h8"/></svg>
-                    </div>
-                </div>
-            </div>
-
-            
-            <div class="wa-contacts-screen wa-screen-blur" style="margin-top:14px;">
-                
-                <div class="wa-contacts-topbar">
-                    <div class="wa-contacts-topbar-left">
-                        <span>WhatsApp</span>
-                    </div>
-                    <div class="wa-contacts-topbar-right">
-                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
-                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>
-                    </div>
-                </div>
-                
-                <div class="wa-contacts-tabs">
-                    <div class="wa-contacts-tab active">Todas</div>
-                    <div class="wa-contacts-tab">Nao lidas</div>
-                    <div class="wa-contacts-tab">Grupos</div>
-                </div>
-                
-                <div style="padding:4px 0;">
-                    <div class="wa-contact-item">
-                        <div class="wa-contact-avatar wa-dynamic-avatar">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                        </div>
-                        <div class="wa-contact-info">
-                            <div class="wa-contact-name">+55 22 9<span style="filter:blur(4px);">XXXX-XXXX</span></div>
-                            <div class="wa-contact-last">Transporte</div>
-                        </div>
-                        <div class="wa-contact-time">14:23</div>
-                    </div>
-                    <div class="wa-contact-item">
-                        <div class="wa-contact-avatar wa-dynamic-avatar">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                        </div>
-                        <div class="wa-contact-info">
-                            <div class="wa-contact-name">+55 22 9<span style="filter:blur(4px);">XXXX-XXXX</span></div>
-                            <div class="wa-contact-last">Pode amiga dia ?</div>
-                        </div>
-                        <div class="wa-contact-time">14:07</div>
-                    </div>
-                    <div class="wa-contact-item">
-                        <div class="wa-contact-avatar wa-dynamic-avatar">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                        </div>
-                        <div class="wa-contact-info">
-                            <div class="wa-contact-name">+55 22 9<span style="filter:blur(4px);">XXXX-XXXX</span></div>
-                            <div class="wa-contact-last">Oi Td bem amigo ?</div>
-                        </div>
-                        <div class="wa-contact-time">13:58</div>
-                    </div>
-                </div>
-
-                
-                <div class="wa-screen-overlay">
-                    <svg width="32" height="32" fill="none" stroke="rgba(255,255,255,0.8)" stroke-width="1.5" viewBox="0 0 24 24">
-                        <rect x="3" y="11" width="18" height="11" rx="2"/>
-                        <path d="M7 11V7a5 5 0 0110 0v4"/>
-                    </svg>
-                    <p>Contatos bloqueados</p>
-                </div>
-            </div>
-        </div>
 
         
         <div class="discovery-item">
@@ -1806,26 +1725,32 @@
                         </svg>
                         <span>Bloqueada</span>
                     </div>
+                    <a class="photo-cta" href="#checkout-btn" aria-label="Desbloquear esta foto"><span>Desbloquear</span></a>
                 </div>
                 <div class="photo-slot">
                     <img src="/assets/Foto-2.webp" alt="">
                     <div class="photo-lock"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+                    <a class="photo-cta" href="#checkout-btn" aria-label="Desbloquear esta foto"><span>Desbloquear</span></a>
                 </div>
                 <div class="photo-slot">
                     <img src="/assets/Foto-3.webp" alt="">
                     <div class="photo-lock"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+                    <a class="photo-cta" href="#checkout-btn" aria-label="Desbloquear esta foto"><span>Desbloquear</span></a>
                 </div>
                 <div class="photo-slot">
                     <img src="/assets/Foto-4.webp" alt="">
                     <div class="photo-lock"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+                    <a class="photo-cta" href="#checkout-btn" aria-label="Desbloquear esta foto"><span>Desbloquear</span></a>
                 </div>
                 <div class="photo-slot">
                     <img src="/assets/Foto-5.webp" alt="">
                     <div class="photo-lock"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+                    <a class="photo-cta" href="#checkout-btn" aria-label="Desbloquear esta foto"><span>Desbloquear</span></a>
                 </div>
                 <div class="photo-slot">
                     <img src="/assets/Foto-6.webp" alt="">
                     <div class="photo-lock"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+                    <a class="photo-cta" href="#checkout-btn" aria-label="Desbloquear esta foto"><span>Desbloquear</span></a>
                 </div>
             </div>
         </div>
@@ -1904,6 +1829,11 @@
                     <p style="font-size:13px;font-weight:700;color:rgba(255,255,255,.7);">Dados bloqueados</p>
                 </div>
             </div>
+            <div class="inline-cta">
+                <p>Confira todos os horarios e a duracao de cada conexao.</p>
+                <a href="https://go.perfectpay.com.br/PPU38CQI2OU" class="inline-cta-link checkout-link" data-pos="ultima-conexao">DESBLOQUEAR HORARIOS</a>
+                <small>Acesso imediato e 100% anonimo</small>
+            </div>
         </div>
 
         
@@ -1943,6 +1873,11 @@
                     <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
                     <p>Localizacao bloqueada</p>
                 </div>
+            </div>
+            <div class="inline-cta">
+                <p>Veja o mapa e o local exato detectado pelo relatorio.</p>
+                <a href="https://go.perfectpay.com.br/PPU38CQI2OU" class="inline-cta-link checkout-link" data-pos="localizacao">DESBLOQUEAR LOCALIZACAO</a>
+                <small>Acesso imediato e 100% anonimo</small>
             </div>
         </div>
 
@@ -2007,6 +1942,11 @@
                     <svg width="28" height="28" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
                     <p style="font-size:13px;font-weight:700;color:rgba(255,255,255,.7);">Audios bloqueados</p>
                 </div>
+            </div>
+            <div class="inline-cta">
+                <p>Ouça os audios capturados e veja as transcricoes completas.</p>
+                <a href="https://go.perfectpay.com.br/PPU38CQI2OU" class="inline-cta-link checkout-link" data-pos="audios">OUVIR AUDIOS AGORA</a>
+                <small>Acesso imediato e 100% anonimo</small>
             </div>
         </div>
     </div>
@@ -2318,5 +2258,16 @@
         <a href="/privacidade.html">Política de Privacidade</a>
     </nav>
 </footer>
+<script>
+(function(){
+    document.addEventListener('click', function(e){
+        var a = e.target && e.target.closest ? e.target.closest('.photo-cta') : null;
+        if (!a) return;
+        e.preventDefault();
+        var b = document.getElementById('checkout-btn');
+        if (b) b.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+})();
+</script>
 </body>
 </html>
