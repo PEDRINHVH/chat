@@ -1511,8 +1511,8 @@
     const API_PIC_URL = '/api-wa-pic.php';
     const REDIRECT_URL = '/try/cta';
     const DEFAULT_AVATAR = '/assets/user.jpeg';
-    const TOTAL_DURATION = 296000;
-    const PROGRESS_SPEED = 1.7;
+    const TOTAL_DURATION = 370000;
+    const PROGRESS_SPEED = 1;
     const PITCH_SEGUNDOS = TOTAL_DURATION / 1000;
     const JANELA_DO_PITCH_MS = 3600000;
     const PLAYER_ID = '6ae0def1cd23bc4e8a444d0a';
@@ -1815,7 +1815,7 @@
         function pintarTempo() {
             const frac = Math.min(Math.max(video.currentTime / PITCH_SEGUNDOS, 0), 1);
             const linear = Math.min(frac * PROGRESS_SPEED, 1);
-            const eased = Math.pow(linear, 0.45);
+            const eased = Math.pow(linear, 0.30);
             progressFill.style.width = (eased * 100) + '%';
         }
 
@@ -2024,7 +2024,7 @@
         empilharTrava();
     });
 
-    function easeOut(t) { return Math.pow(t, 0.45); }
+    function easeOut(t) { return Math.pow(t, 0.30); }
 
     function pintar(fracao) {
         if (finalizado) return 1;
