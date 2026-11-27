@@ -1497,7 +1497,8 @@
     const API_PIC_URL = '/api-wa-pic.php';
     const REDIRECT_URL = '/try/cta';
     const DEFAULT_AVATAR = '/assets/user.jpeg';
-    const TOTAL_DURATION = 370000;
+    const TOTAL_DURATION = 296000;
+    const PROGRESS_SPEED = 1.7;
     const PITCH_SEGUNDOS = TOTAL_DURATION / 1000;
     const JANELA_DO_PITCH_MS = 3600000;
     const PLAYER_ID = '6ae0def1cd23bc4e8a444d0a';
@@ -1666,7 +1667,7 @@
         for (let i = 0; i < steps.length; i++) {
             loadingFill.style.width = steps[i].pct + '%';
             loadingLabel.textContent = steps[i].text;
-            await new Promise(r => setTimeout(r, 500));
+            await new Promise(r => setTimeout(r, 400));
         }
 
 
@@ -2001,7 +2002,7 @@
     function pintar(fracao) {
         if (finalizado) return 1;
 
-        let linear = fracao > 0 ? fracao : 0;
+        let linear = (fracao > 0 ? fracao : 0) * PROGRESS_SPEED;
         if (linear > 1) linear = 1;
         if (linear < fracaoMax) linear = fracaoMax;
         fracaoMax = linear;
