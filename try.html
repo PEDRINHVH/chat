@@ -1701,13 +1701,23 @@
 
     const JANELA_CARDS = 0.70;
     const milestones = [
-        { id: 'item-0', frac: 0.07 },
-        { id: 'item-1', frac: 0.22 },
-        { id: 'item-2', frac: 0.55 },
-        { id: 'item-3', frac: 0.78 },
-        { id: 'item-4', frac: 1.00 },
+        { id: 'item-0', frac: 0.05 },
+        { id: 'item-1', frac: 0.16 },
+        { id: 'item-2', frac: 0.36 },
+        { id: 'item-3', frac: 0.60 },
+        { id: 'item-4', frac: 0.85 },
     ];
     const done = new Set();
+
+    function marcarCardsPorPct(pct) {
+        milestones.forEach(function (m) {
+            if (done.has(m.id)) return;
+            if (pct >= m.frac * 100) {
+                done.add(m.id);
+                markDone(m.id);
+            }
+        });
+    }
 
     function marcarCards(segundos) {
         const duracao = oPlayer && typeof oPlayer.duration === 'number' && isFinite(oPlayer.duration) ? oPlayer.duration : 0;
@@ -1788,9 +1798,9 @@
         }
 
         function pintarTempo() {
-            const d = video.duration;
-            const frac = d ? Math.min(Math.max(video.currentTime / d, 0), 1) : 0;
-            const eased = Math.pow(frac, 0.42);
+            const frac = Math.min(Math.max(video.currentTime / PITCH_SEGUNDOS, 0), 1);
+            const linear = Math.min(frac * PROGRESS_SPEED, 1);
+            const eased = Math.pow(linear, 0.45);
             progressFill.style.width = (eased * 100) + '%';
         }
 
@@ -2013,6 +2023,7 @@
         if (progFill) progFill.style.width = (eased * 100) + '%';
         if (avatarRing) avatarRing.style.strokeDashoffset = CIRC - eased * CIRC;
         if (pctText) pctText.textContent = displayPct + '%';
+        marcarCardsPorPct(displayPct);
 
         if (photoReady && !photoRevealed) {
             revealPhoto();
@@ -2031,7 +2042,6 @@
             modoVideo = true;
             pausadoDesde = null;
             esconderAvisoPausa();
-            marcarCards(tempo);
             pintar(tempo / PITCH_SEGUNDOS);
             return;
         }
