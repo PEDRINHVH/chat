@@ -753,6 +753,9 @@
             font-weight: 800;
             text-align: center;
             text-decoration: none;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
             border-radius: 16px;
             box-shadow: 0 8px 30px rgba(37,211,102,0.4);
         }
@@ -1203,6 +1206,22 @@
                 max-width: 400px;
             }
         }
+        .zr-legal-footer {
+            max-width: 720px;
+            margin: 26px auto 34px;
+            padding: 16px 20px 0;
+            border-top: 1px solid #e2e8f0;
+            text-align: center;
+            font-size: 11px;
+            line-height: 1.65;
+            color: #64748b;
+        }
+        .zr-legal-footer p { margin: 0 0 5px; }
+        .zr-legal-footer strong { color: #0f172a; }
+        .zr-legal-footer nav { margin-top: 6px; }
+        .zr-legal-footer nav a { color: #128C7E; text-decoration: none; font-weight: 600; }
+        .zr-legal-footer nav a:hover { text-decoration: underline; }
+        .zr-legal-footer nav span { margin: 0 5px; color: #94a3b8; }
     </style>
     <script>
       window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
@@ -1260,6 +1279,15 @@
         </div>
 
     </div>
+    <footer class="zr-legal-footer">
+        <p><strong>ZapRadar</strong> · Não afiliado ao WhatsApp, Meta ou Facebook.</p>
+        <p>Resultados ilustrativos e podem variar conforme o número analisado.</p>
+        <nav>
+            <a href="/termos.html">Termos de uso</a>
+            <span>·</span>
+            <a href="/privacidade.html">Política de Privacidade</a>
+        </nav>
+    </footer>
 </div>
 
 
@@ -1281,9 +1309,9 @@
         </div>
 
         <div id="cta-btn-wrap" class="cta-btn-wrap hide">
-            <a id="cta-btn" href="/try/cta" class="cta-btn">
+            <button id="cta-btn" type="button" class="cta-btn">
                 🔓 CLIQUE PARA VER O QUE ENCONTRAMOS
-            </a>
+            </button>
         </div>
 
         <div class="analysis-block">
@@ -1430,6 +1458,15 @@
             <div class="ssl-sub">Não responda mensagens para se manter discreto.</div>
         </div>
     </div>
+    <footer class="zr-legal-footer">
+        <p><strong>ZapRadar</strong> · Não afiliado ao WhatsApp, Meta ou Facebook.</p>
+        <p>Resultados ilustrativos e podem variar conforme o número analisado.</p>
+        <nav>
+            <a href="/termos.html">Termos de uso</a>
+            <span>·</span>
+            <a href="/privacidade.html">Política de Privacidade</a>
+        </nav>
+    </footer>
 </div>
 
 <script>
@@ -2027,7 +2064,7 @@
             const forward = new URLSearchParams();
             forward.set('phone', phone);
             forward.set('src', FORCED_SRC);
-            ctaBtn.href = REDIRECT_URL + '?' + forward.toString();
+            ctaBtn.dataset.href = REDIRECT_URL + '?' + forward.toString();
         }
 
 
@@ -2059,7 +2096,14 @@
         if (!btn) return;
         e.preventDefault();
         const phone = ultimoPhoneDisplay || lsGet('wa_phone') || '';
-        window.location.href = '/try/cta?phone=' + encodeURIComponent(phone) + '&src=' + FORCED_SRC;
+        const forward = new URLSearchParams();
+        forward.set('phone', phone);
+        forward.set('src', FORCED_SRC);
+        ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'utm_id', 'fbclid'].forEach(function (k) {
+            const v = new URLSearchParams(location.search).get(k) || lsGet(k);
+            if (v) forward.set(k, v);
+        });
+        window.location.href = (btn.dataset.href && btn.dataset.href.split('?')[0] || '/try/cta') + '?' + forward.toString();
     });
 
 })();
