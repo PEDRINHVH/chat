@@ -54,6 +54,8 @@
   let pendingSkip = null;
   let selectedPack = PACKS[1];
   let couponApplied = false;
+  let ppConfig = null;
+  let ppSdkPromise = null;
   let pixInterval = null;
   let queueInterval = null;
   let tickerInterval = null;
@@ -349,7 +351,161 @@
         ? 'Seu plano FREE chegou ao fim e ainda faltam ' + need + ' tokens para concluir esta análise.'
         : 'Você usou todos os 100 tokens de boas-vindas. Recarregue para continuar a análise deste registro.';
     renderPacks();
+    if (ppConfig) applyPpConfig();
+    else loadPpConfig();
     openModal('modalPaywall');
+  }
+
+  function applyPpConfig() {
+    const row = $('#payEmailRow');
+    if (row) row.hidden = !ppConfig.configured;
+    const btn = $('#paywallBuyBtn');
+    if (btn) btn.textContent = ppConfig.configured ? 'Pagar com PerfectPay' : 'Pagar com PIX';
+  }
+
+  async function loadPpConfig() {
+    try {
+      const r = await fetch('/api/pp-config');
+      ppConfig = await r.json();
+    } catch (e) {
+      ppConfig = { configured: false };
+    }
+    applyPpConfig();
+    return ppConfig;
+  }
+
+  function ppTotal() {
+    return selectedPack.tokens + selectedPack.bonus + (couponApplied ? Math.round(selectedPack.tokens * 0.3) : 0);
+  }
+
+  function loadPerfectSdk(url) {
+    if (window.Perfect) return Promise.resolve();
+    if (ppSdkPromise) return ppSdkPromise;
+    ppSdkPromise = new Promise((resolve, reject) => {
+      const s = document.createElement('script');
+      s.src = url;
+      s.async = true;
+      s.onload = resolve;
+      s.onerror = () => { ppSdkPromise = null; reject(new Error('sdk')); };
+      document.head.appendChild(s);
+    });
+    return ppSdkPromise;
+  }
+
+  async function beginPayment() {
+    if (!ppConfig) await loadPpConfig();
+    if (!ppConfig.configured) { openCheckout(); return; }
+    const email = ($('#payEmail').value || '').trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      toast('Informe um e-mail válido para o recibo', 'error');
+      $('#payEmail').focus();
+      return;
+    }
+    state.email = email;
+    save();
+    const started = await startPerfectPayment();
+    if (!started) toast('Gateway indisponível no momento. Usando PIX.', 'error');
+  }
+
+  async function startPerfectPayment() {
+    try {
+      const res = await fetch('/api/pp-create', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ pack: selectedPack.id, name: state.name, email: state.email, phone: state.phone })
+      });
+      const data = await res.json();
+      if (!res.ok || !data.client_secret) return false;
+      await loadPerfectSdk(ppConfig.sdkUrl);
+      if (!window.Perfect) return false;
+      const perfect = window.Perfect({ publishableKey: data.publicKey }, { customBackendUrl: data.apiBase });
+      const widgets = perfect.widgets({ clientSecret: data.client_secret, appearance: { labels: 'floating' } });
+      const total = ppTotal();
+      $('#ppPack').textContent = fmt(total) + ' tokens';
+      $('#ppPrice').textContent = selectedPack.label;
+      $('#perfectElement').innerHTML = '';
+      $('#ppMessage').textContent = '';
+      $('#ppPayBtn').disabled = false;
+      const element = widgets.create('payment', {
+        wallets: {
+          walletReturnUrl: location.origin,
+          applePay: 'auto',
+          googlePay: 'auto',
+          style: { theme: 'default', type: 'default', height: 55 }
+        }
+      });
+      element.mount('#perfectElement');
+      closeModal('modalPaywall');
+      openModal('modalPerfectPay');
+      localStorage.setItem('pp_pending', JSON.stringify({
+        client_secret: data.client_secret,
+        pack: selectedPack.id,
+        apiBase: data.apiBase,
+        publicKey: data.publicKey,
+        sdkUrl: ppConfig.sdkUrl,
+        total
+      }));
+      $('#ppPayBtn').onclick = async () => {
+        $('#ppPayBtn').disabled = true;
+        $('#ppMessage').textContent = 'Processando...';
+        try {
+          const out = await perfect.confirmPayment({
+            elements: widgets,
+            confirmParams: { return_url: location.origin + '/acesso/?pagamento=retorno' }
+          });
+          if (out && out.error) {
+            $('#ppMessage').textContent = out.error.message || 'Pagamento não concluído.';
+            $('#ppPayBtn').disabled = false;
+            return;
+          }
+          const check = await perfect.retrievePaymentIntent(data.client_secret);
+          const status = check && check.paymentIntent && check.paymentIntent.status;
+          if (status === 'succeeded') finalizePpPayment();
+          else if (status === 'requires_customer_action') $('#ppMessage').textContent = 'Siga as instruções do pagamento.';
+          else if (status === 'processing') $('#ppMessage').textContent = 'Pagamento em processamento. O saldo entra assim que aprovado.';
+          else { $('#ppMessage').textContent = 'Pagamento não aprovado. Tente novamente.'; $('#ppPayBtn').disabled = false; }
+        } catch (e) {
+          $('#ppMessage').textContent = 'Falha ao processar o pagamento.';
+          $('#ppPayBtn').disabled = false;
+        }
+      };
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function finalizePpPayment() {
+    let pending = null;
+    try { pending = JSON.parse(localStorage.getItem('pp_pending') || 'null'); } catch (e) {}
+    const total = pending && pending.total ? pending.total : ppTotal();
+    localStorage.removeItem('pp_pending');
+    credit(total, '+' + fmt(total) + ' tokens adicionados ao saldo');
+    closeModal('modalPerfectPay');
+    setTimeout(() => {
+      if (pendingAction) {
+        const fn = pendingAction;
+        pendingAction = null;
+        pendingSkip = null;
+        fn();
+      }
+    }, 900);
+  }
+
+  async function resumePendingPayment() {
+    let pending = null;
+    try { pending = JSON.parse(localStorage.getItem('pp_pending') || 'null'); } catch (e) { return; }
+    if (!pending || !pending.client_secret) return;
+    try {
+      if (!ppConfig) await loadPpConfig();
+      await loadPerfectSdk(pending.sdkUrl || ppConfig.sdkUrl);
+      if (!window.Perfect) return;
+      const perfect = window.Perfect({ publishableKey: pending.publicKey || ppConfig.publicKey }, { customBackendUrl: pending.apiBase || ppConfig.apiBase });
+      const result = await perfect.retrievePaymentIntent(pending.client_secret);
+      const status = result && result.paymentIntent && result.paymentIntent.status;
+      if (status === 'succeeded') finalizePpPayment();
+      else if (status === 'failed' || status === 'expired') localStorage.removeItem('pp_pending');
+    } catch (e) {}
   }
 
   function renderPacks() {
@@ -887,7 +1043,7 @@
 
     $('#walletBtn').addEventListener('click', () => { openPaywall(state.tokens < 20 ? 20 : 0); });
     $('#buyTokensBtn').addEventListener('click', openPaywall);
-    $('#paywallBuyBtn').addEventListener('click', openCheckout);
+    $('#paywallBuyBtn').addEventListener('click', beginPayment);
     $('#packList').addEventListener('click', (e) => {
       const p = e.target.closest('[data-pack]');
       if (p) selectPack(p.dataset.pack);
@@ -1001,6 +1157,8 @@
     renderHistory();
     renderBonus();
     startTicker();
+    loadPpConfig();
+    resumePendingPayment();
     $('#tickerText').style.transition = 'opacity .25s';
     if (!state.onboarded) {
       setTimeout(() => openModal('modalOnboarding'), 450);

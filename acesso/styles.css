@@ -923,6 +923,24 @@ img { max-width: 100%; display: block; }
 .coupon-row .field { flex: 1; }
 .trust-row { display: flex; justify-content: space-between; font-size: 9.5px; color: var(--text-muted); margin-top: 11px; }
 
+#payEmailRow { margin-bottom: 12px; }
+#payEmailRow .field { margin-bottom: 0; }
+.pp-element {
+  min-height: 120px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 12px;
+  margin-bottom: 12px;
+}
+.pp-message {
+  min-height: 15px;
+  margin: 8px 0 0;
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--danger);
+  text-align: center;
+}
 .checkout-summary {
   display: flex; justify-content: space-between; align-items: center;
   background: #f8fafc; border: 1px solid var(--border);

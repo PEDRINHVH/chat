@@ -328,6 +328,11 @@
 
     <div class="pack-list" id="packList"></div>
 
+    <div id="payEmailRow" hidden>
+      <label class="field-label" for="payEmail">E-mail para o recibo</label>
+      <input class="field field-sm" id="payEmail" type="email" inputmode="email" placeholder="voce@email.com" aria-label="E-mail para o recibo" autocomplete="email">
+    </div>
+
     <div class="coupon-row">
       <input class="field field-sm" id="couponInput" type="text" placeholder="Cupom de desconto" maxlength="12" aria-label="Cupom de desconto">
       <button class="btn btn-ghost btn-sm" id="couponBtn" type="button">Aplicar</button>
@@ -336,6 +341,26 @@
     <button class="btn btn-green btn-lg" id="paywallBuyBtn" type="button">Pagar com PIX</button>
     <div class="trust-row">
       <span>🔒 Ambiente seguro</span>
+      <span>⚡ Liberação imediata</span>
+      <span>↩ 7 dias de garantia</span>
+    </div>
+  </div>
+</section>
+
+<section class="modal" id="modalPerfectPay" role="dialog" aria-modal="true" aria-labelledby="ppTitle" hidden>
+  <div class="modal-sheet">
+    <button class="modal-close" data-close="modalPerfectPay" type="button" aria-label="Fechar">✕</button>
+    <span class="modal-kicker">Pagamento seguro</span>
+    <h2 id="ppTitle">Finalizar compra</h2>
+    <div class="checkout-summary">
+      <span id="ppPack">300 tokens</span>
+      <strong id="ppPrice">R$ 19,90</strong>
+    </div>
+    <div id="perfectElement" class="pp-element"></div>
+    <button class="btn btn-green btn-lg" id="ppPayBtn" type="button">Pagar agora</button>
+    <p class="pp-message" id="ppMessage"></p>
+    <div class="trust-row">
+      <span>🔒 PerfectPay</span>
       <span>⚡ Liberação imediata</span>
       <span>↩ 7 dias de garantia</span>
     </div>
