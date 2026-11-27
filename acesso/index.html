@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f8fafc">
+<title>ZapRadar — Dossiê de WhatsApp</title>
+<meta name="description" content="Digite um número e receba o dossiê do WhatsApp: foto de perfil, conversa, contato oculto e fotos para desbloquear.">
+<link rel="icon" href="/assets/bolinha.svg" type="image/svg+xml">
+<link rel="preload" href="/assets/logo.webp" as="image">
+<link rel="stylesheet" href="/acesso/styles.css">
+</head>
+<body>
+<div class="app" id="app">
+
+  <header class="topbar">
+    <div class="brand">
+      <img src="/assets/logo.webp" alt="ZapRadar" class="brand-logo">
+      <span class="brand-beta">BETA</span>
+    </div>
+    <button class="wallet" id="walletBtn" type="button" aria-label="Abrir loja de tokens">
+      <span class="wallet-bolt">⚡</span>
+      <span class="wallet-count" id="tokenCount">100</span>
+      <span class="wallet-label">tokens</span>
+    </button>
+  </header>
+
+  <main class="app-main">
+
+    <section class="screen" id="screenHome">
+      <div class="plan-strip" id="planStrip">
+        <div class="plan-strip-left">
+          <span class="plan-badge" id="planBadge">FREE</span>
+          <div>
+            <strong id="planTitle">Plano gratuito ativo</strong>
+            <span id="planSub">100 tokens de boas-vindas</span>
+          </div>
+        </div>
+        <span class="plan-renew" id="planRenew">renova em 29d</span>
+      </div>
+
+      <div class="hero">
+        <span class="hero-chip">📡 Radar nacional ativo</span>
+        <h1>Veja o que esse <span class="accent">número</span> faz no WhatsApp</h1>
+        <p>Digite o número que você quer investigar. A IA puxa a foto do perfil, encontra a conversa e revela quem está por perto.</p>
+      </div>
+
+      <form class="search-card" id="searchForm" autocomplete="off">
+        <label class="field-label" for="personPhone">Número do WhatsApp</label>
+        <div class="phone-row">
+          <span class="phone-prefix">+55</span>
+          <input class="phone-number-input" id="personPhone" name="phone" type="tel" placeholder="(11) 99999-8765" maxlength="15" inputmode="numeric" required>
+        </div>
+        <p class="field-error" id="phoneError">Digite um número válido com DDD.</p>
+
+        <button class="btn btn-green btn-lg" id="searchBtn" type="submit">
+          <span>Analisar WhatsApp</span>
+          <span class="btn-cost">35 tokens</span>
+        </button>
+
+        <div class="search-meta">
+          <span>Foto via API do WhatsApp</span>
+          <span>IA de conversas</span>
+          <span>98,2% precisão</span>
+        </div>
+      </form>
+
+      <div class="stats-grid">
+        <div class="stat">
+          <strong>4.713.902</strong>
+          <span>números indexados</span>
+        </div>
+        <div class="stat">
+          <strong>23</strong>
+          <span>bases integradas</span>
+        </div>
+        <div class="stat">
+          <strong>1min42</strong>
+          <span>tempo médio</span>
+        </div>
+      </div>
+
+      <div class="social-ticker" aria-hidden="true">
+        <span class="ticker-dot"></span>
+        <span id="tickerText">Marina encontrou um número em São Paulo agora</span>
+      </div>
+
+      <div class="section-head">
+        <h2>Buscas recentes</h2>
+        <button class="link-btn" id="clearHistory" type="button">Limpar</button>
+      </div>
+      <div class="history-list" id="historyList">
+        <p class="empty-state">Nenhuma busca ainda. Seu primeiro resultado aparece aqui.</p>
+      </div>
+
+      <div class="referral-card">
+        <div class="referral-icon">🎁</div>
+        <div class="referral-copy">
+          <strong>Indique e ganhe 75 tokens</strong>
+          <span>Cada amigo que ativar o radar libera saldo extra pra você.</span>
+        </div>
+        <button class="btn btn-ghost btn-sm" id="referralBtn" type="button">Convidar</button>
+      </div>
+
+      <div class="bonus-card" id="bonusCard">
+        <div>
+          <strong>Bônus diário disponível</strong>
+          <span>+10 tokens por abrir o radar hoje.</span>
+        </div>
+        <button class="btn btn-ghost btn-sm" id="dailyBonusBtn" type="button">Resgatar</button>
+      </div>
+
+      <footer class="app-footer">
+        <button class="link-btn" data-modal="terms" type="button">Termos</button>
+        <button class="link-btn" data-modal="privacy" type="button">Privacidade</button>
+        <button class="link-btn" data-modal="support" type="button">Suporte</button>
+        <span class="footer-copy">© 2026 ZapRadar Tecnologia Ltda.</span>
+      </footer>
+    </section>
+
+    <section class="screen" id="screenScan" hidden>
+      <div class="scan-head">
+        <span class="scan-live"><span class="pulse"></span> IA em execução</span>
+        <span class="scan-eta" id="scanEta">ETA 00:42</span>
+      </div>
+
+      <div class="ai-card">
+        <div class="ai-head">
+          <div class="ai-orb"><span>IA</span></div>
+          <div class="ai-head-copy">
+            <strong>IA ZapRadar</strong>
+            <span id="aiStatus">analisando o número informado…</span>
+          </div>
+          <span class="ai-online">online</span>
+        </div>
+
+        <div class="ai-bubble"><span id="aiThinking">Conectando ao WhatsApp…</span><span class="ai-caret"></span></div>
+
+        <div class="progress-wrap">
+          <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+          <div class="progress-meta">
+            <span id="progressPercent">0%</span>
+            <span id="progressStage">Iniciando análise</span>
+          </div>
+        </div>
+
+        <ul class="stage-list ai-steps" id="stageList"></ul>
+      </div>
+
+      <div class="queue-card" id="queueCard" hidden>
+        <div class="queue-head">
+          <strong>Fila de prioridade</strong>
+          <span id="queuePosition">posição 47</span>
+        </div>
+        <p id="queueText">Sua análise entrou na fila nacional. A previsão de liberação é de até 2 minutos.</p>
+        <div class="queue-timer"><span id="queueClock">01:58</span> restantes</div>
+        <button class="btn btn-green" id="priorityBtn" type="button">
+          <span>Furar fila com prioridade</span>
+          <span class="btn-cost">20 tokens</span>
+        </button>
+        <button class="link-btn queue-skip" id="queueSkip" type="button">Aguardar na fila padrão</button>
+      </div>
+
+      <div class="scan-warning">⚠ Não feche esta tela. A IA encerra a análise se você sair.</div>
+
+      <div class="scan-tokens">
+        <span>Consumo desta análise</span>
+        <strong id="scanSpent">0 tokens</strong>
+      </div>
+    </section>
+
+    <section class="screen" id="screenResult" hidden>
+      <div class="result-head">
+        <span class="result-chip">✓ Análise concluída</span>
+        <span class="result-id" id="resultId">#ZR-000000</span>
+      </div>
+
+      <article class="profile-card">
+        <div class="profile-top">
+          <div class="profile-avatar" id="profileAvatar">
+            <img id="profilePhoto" alt="Foto do perfil do WhatsApp" hidden>
+            <span id="profileFallback">WA</span>
+          </div>
+          <div class="profile-id">
+            <h2 id="resultPhone">—</h2>
+            <span class="profile-city" id="resultStatus">WhatsApp ativo agora</span>
+            <span class="pill pill-green">número verificado</span>
+          </div>
+        </div>
+        <div class="photo-source">
+          <span class="photo-source-dot"></span>
+          <span>Foto sincronizada via API do WhatsApp</span>
+          <span class="photo-source-check" id="photoSourceCheck">✓</span>
+        </div>
+      </article>
+
+      <div class="lover-card">
+        <div class="lover-head">
+          <span>🔥 A IA encontrou 1 foto oculta</span>
+          <span class="pill pill-lock">sensível</span>
+        </div>
+        <div class="lover-media">
+          <img id="loverImg" class="lover-img is-blurred" src="/assets/Foto-3.webp" alt="Foto do amante">
+          <div class="lover-overlay" id="loverOverlay">
+            <span class="lover-lock">🔒</span>
+            <strong>Foto do amante</strong>
+            <button class="btn btn-green btn-sm" id="loverPhotoBtn" type="button">
+              <span>Ver foto completa</span>
+              <span class="btn-cost">45 tokens</span>
+            </button>
+          </div>
+        </div>
+        <div class="lover-foot">
+          <span id="loverName">•••••</span>
+          <span id="loverMeta">1 foto · alta afinidade</span>
+        </div>
+      </div>
+
+      <div class="chat-preview">
+        <div class="chat-top">
+          <span class="chat-avatar" id="chatLoverAvatar"><img id="chatLoverImg" src="/assets/Foto-3.webp" alt="" class="is-blurred"></span>
+          <span class="chat-top-copy">
+            <strong id="chatLoverName">•••••</strong>
+            <span id="chatLoverStatus">online agora</span>
+          </span>
+          <span class="pill pill-lock" id="chatBadge">amante</span>
+        </div>
+        <div class="chat-body" id="chatBody"></div>
+        <p class="chat-note" id="chatNote">8 de 218 mensagens · 12 áudios · 6 fotos</p>
+      </div>
+
+      <div class="drip-card" id="dripCard">
+        <strong>Conversa completa bloqueada</strong>
+        <p>A IA separou as 218 mensagens, 12 áudios e 6 fotos com maior afinidade. Veja o restante da conversa.</p>
+        <div class="chat-tags">
+          <span>💬 218 mensagens</span>
+          <span>🎙️ 12 áudios</span>
+          <span>📷 6 fotos</span>
+        </div>
+        <button class="btn btn-green" id="conversationBtn" type="button">
+          <span>Desbloquear conversa completa</span>
+          <span class="btn-cost">45 tokens</span>
+        </button>
+      </div>
+
+      <div class="section-head">
+        <h2>Detalhes do contato</h2>
+        <span class="section-count" id="detailsCount">0 de 4 desbloqueados</span>
+      </div>
+
+      <div class="detail-list" id="detailList">
+        <button class="detail-row" data-detail="lastSeen" type="button">
+          <span class="detail-icon">🕒</span>
+          <span class="detail-copy"><strong>Última conexão</strong><small>Horário real de atividade</small></span>
+          <span class="detail-lock"><span>15</span> 🔒</span>
+        </button>
+        <button class="detail-row" data-detail="location" type="button">
+          <span class="detail-icon">📍</span>
+          <span class="detail-copy"><strong>Localização aproximada</strong><small>Cidade e estado do número</small></span>
+          <span class="detail-lock"><span>25</span> 🔒</span>
+        </button>
+        <button class="detail-row" data-detail="deleted" type="button">
+          <span class="detail-icon">🗑️</span>
+          <span class="detail-copy"><strong>Mensagens apagadas</strong><small>Registros removidos nos últimos 7 dias</small></span>
+          <span class="detail-lock"><span>20</span> 🔒</span>
+        </button>
+        <button class="detail-row" data-detail="risk" type="button">
+          <span class="detail-icon">🛡️</span>
+          <span class="detail-copy"><strong>Índice de risco</strong><small>Score de interações suspeitas</small></span>
+          <span class="detail-lock"><span>25</span> 🔒</span>
+        </button>
+      </div>
+
+      <div class="result-actions">
+        <button class="btn btn-green" id="newSearchBtn" type="button">Nova busca</button>
+        <button class="btn btn-outline" id="buyTokensBtn" type="button">Comprar tokens</button>
+      </div>
+
+      <p class="result-disclaimer">Análise gerada pela IA do ZapRadar a partir de sinais públicos do WhatsApp. Conversas e fotos podem ter mais de um envolvido.</p>
+    </section>
+
+  </main>
+
+  <nav class="tabbar" aria-label="Navegação">
+    <button class="tab is-active" data-screen="home" type="button"><span class="tab-icon">📡</span><span>Radar</span></button>
+    <button class="tab" data-open="history" type="button"><span class="tab-icon">🕘</span><span>Histórico</span></button>
+    <button class="tab" data-open="store" type="button"><span class="tab-icon">⚡</span><span>Tokens</span></button>
+    <button class="tab" data-open="support" type="button"><span class="tab-icon">💬</span><span>Ajuda</span></button>
+  </nav>
+
+  <button class="support-fab" id="supportFab" type="button" aria-label="Abrir suporte">
+    <span>💬</span>
+    <span class="support-badge">1</span>
+  </button>
+</div>
+
+<div class="modal-backdrop" id="modalBackdrop" hidden></div>
+
+<section class="modal" id="modalOnboarding" role="dialog" aria-modal="true" aria-labelledby="onboardTitle" hidden>
+  <div class="modal-sheet">
+    <div class="modal-logo"><img src="/assets/logo.webp" alt="ZapRadar"></div>
+    <span class="modal-kicker">Acesso liberado</span>
+    <h2 id="onboardTitle">Ative seu radar grátis</h2>
+    <p class="modal-sub">Você ganhou <strong>100 tokens</strong> de boas-vindas para a primeira busca completa.</p>
+    <form id="onboardForm" autocomplete="off">
+      <label class="field-label" for="onboardName">Seu nome</label>
+      <input class="field" id="onboardName" type="text" placeholder="Como podemos te chamar?" maxlength="40" required>
+      <label class="field-label" for="onboardPhone">Seu WhatsApp</label>
+      <input class="field" id="onboardPhone" type="tel" placeholder="(11) 99999-0000" maxlength="16" inputmode="numeric" required>
+      <button class="btn btn-green btn-lg" type="submit">Ativar radar e ganhar 100 tokens</button>
+    </form>
+    <p class="modal-fine">Ao ativar você concorda com os <button class="link-btn" data-modal="terms" type="button">Termos</button> e a <button class="link-btn" data-modal="privacy" type="button">Política de Privacidade</button>.</p>
+  </div>
+</section>
+
+<section class="modal" id="modalPaywall" role="dialog" aria-modal="true" aria-labelledby="paywallTitle" hidden>
+  <div class="modal-sheet modal-wide">
+    <button class="modal-close" data-close="modalPaywall" type="button" aria-label="Fechar">✕</button>
+    <span class="modal-kicker modal-kicker-red">Saldo insuficiente</span>
+    <h2 id="paywallTitle">Seu plano FREE atingiu o limite</h2>
+    <p class="modal-sub" id="paywallSub">Você usou os 100 tokens de boas-vindas. Recarregue para continuar a análise deste registro.</p>
+
+    <div class="balance-meter">
+      <div class="balance-meter-top"><span>Saldo atual</span><strong id="paywallBalance">0 tokens</strong></div>
+      <div class="meter"><div class="meter-fill" id="meterFill"></div></div>
+      <div class="balance-meter-foot"><span id="paywallNeed">Faltam 45 tokens</span><span>100 / 100 usados</span></div>
+    </div>
+
+    <div class="pack-list" id="packList"></div>
+
+    <div class="coupon-row">
+      <input class="field field-sm" id="couponInput" type="text" placeholder="Cupom de desconto" maxlength="12" aria-label="Cupom de desconto">
+      <button class="btn btn-ghost btn-sm" id="couponBtn" type="button">Aplicar</button>
+    </div>
+
+    <button class="btn btn-green btn-lg" id="paywallBuyBtn" type="button">Pagar com PIX</button>
+    <div class="trust-row">
+      <span>🔒 Ambiente seguro</span>
+      <span>⚡ Liberação imediata</span>
+      <span>↩ 7 dias de garantia</span>
+    </div>
+  </div>
+</section>
+
+<section class="modal" id="modalCheckout" role="dialog" aria-modal="true" aria-labelledby="checkoutTitle" hidden>
+  <div class="modal-sheet">
+    <button class="modal-close" data-close="modalCheckout" type="button" aria-label="Fechar">✕</button>
+    <span class="modal-kicker">Pagamento via PIX</span>
+    <h2 id="checkoutTitle">Finalizar recarga</h2>
+    <div class="checkout-summary" id="checkoutSummary">
+      <span id="checkoutPack">300 tokens</span>
+      <strong id="checkoutPrice">R$ 19,90</strong>
+    </div>
+    <div class="qr-wrap">
+      <canvas id="pixCanvas" width="440" height="440" aria-label="QR Code PIX"></canvas>
+      <span class="qr-badge">PIX</span>
+    </div>
+    <p class="pix-code" id="pixCode">00020126580014BR.GOV.BCB.PIX...</p>
+    <button class="btn btn-outline btn-sm" id="copyPixBtn" type="button">Copiar código PIX</button>
+    <div class="payment-status" id="paymentStatus">
+      <span class="payment-dot"></span>
+      <span id="paymentStatusText">Aguardando pagamento · expira em <b id="pixTimer">09:58</b></span>
+    </div>
+    <button class="btn btn-ghost btn-sm" id="simulatePayBtn" type="button">Já fiz o pagamento</button>
+    <p class="modal-fine">O saldo é creditado automaticamente após a confirmação do banco.</p>
+  </div>
+</section>
+
+<section class="modal" id="modalReferral" role="dialog" aria-modal="true" aria-labelledby="referralTitle" hidden>
+  <div class="modal-sheet">
+    <button class="modal-close" data-close="modalReferral" type="button" aria-label="Fechar">✕</button>
+    <span class="modal-kicker">Programa de indicação</span>
+    <h2 id="referralTitle">Ganhe 75 tokens por amigo</h2>
+    <p class="modal-sub">Envie seu link. Quando a pessoa ativar o radar e fizer a primeira busca, o bônus cai na sua conta.</p>
+    <div class="share-link" id="shareLink">https://zapradar.app/?ref=ZD000000</div>
+    <button class="btn btn-green" id="copyRefBtn" type="button">Copiar meu link</button>
+    <div class="referral-stats">
+      <div><strong id="refClicks">0</strong><span>cliques</span></div>
+      <div><strong id="refSignups">0</strong><span>ativaram</span></div>
+      <div><strong id="refTokens">0</strong><span>tokens ganhos</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="modal" id="modalHistory" role="dialog" aria-modal="true" aria-labelledby="historyTitle" hidden>
+  <div class="modal-sheet modal-wide">
+    <button class="modal-close" data-close="modalHistory" type="button" aria-label="Fechar">✕</button>
+    <span class="modal-kicker">Seu histórico</span>
+    <h2 id="historyTitle">Buscas realizadas</h2>
+    <div class="history-list history-modal" id="historyModalList"></div>
+  </div>
+</section>
+
+<section class="modal" id="modalSupport" role="dialog" aria-modal="true" aria-labelledby="supportTitle" hidden>
+  <div class="modal-sheet modal-chat">
+    <button class="modal-close" data-close="modalSupport" type="button" aria-label="Fechar">✕</button>
+    <div class="support-head">
+      <div class="support-avatar">ZR</div>
+      <div>
+        <strong id="supportTitle">Central ZapRadar</strong>
+        <span class="support-online">online agora</span>
+      </div>
+    </div>
+    <div class="support-body" id="supportBody">
+      <div class="support-msg support-msg-in">Oi! Sou a assistente do ZapRadar. Precisa de ajuda com tokens ou com o número encontrado?</div>
+    </div>
+    <div class="support-quick" id="supportQuick">
+      <button type="button" data-q="Meus tokens acabaram">Meus tokens acabaram</button>
+      <button type="button" data-q="O número está errado">O número está errado</button>
+      <button type="button" data-q="Como funciona o plano FREE?">Como funciona o plano FREE?</button>
+    </div>
+    <form class="support-form" id="supportForm">
+      <input class="field field-sm" id="supportInput" type="text" placeholder="Digite sua mensagem..." maxlength="120" aria-label="Mensagem para o suporte">
+      <button class="btn btn-green btn-sm" type="submit">Enviar</button>
+    </form>
+  </div>
+</section>
+
+<section class="modal" id="modalTerms" role="dialog" aria-modal="true" aria-labelledby="termsTitle" hidden>
+  <div class="modal-sheet modal-wide">
+    <button class="modal-close" data-close="modalTerms" type="button" aria-label="Fechar">✕</button>
+    <span class="modal-kicker">Documento legal</span>
+    <h2 id="termsTitle">Termos de uso</h2>
+    <div class="legal-copy">
+      <p>O ZapRadar é uma ferramenta de consulta que reúne sinais públicos de diretórios, redes sociais e bases de contato para montar um dossiê do número de WhatsApp informado.</p>
+      <p>Os tokens são créditos pré-pagos consumidos por consulta e por desbloqueio de detalhes. Tokens não expiram enquanto a conta estiver ativa e não são reembolsáveis após consumo.</p>
+      <p>O resultado pode apresentar mais de um titular para o mesmo número. A precisão informada é uma média histórica, não uma garantia individual.</p>
+      <p>Assinaturas e recargas são processadas por parceiro de pagamento. Reembolso integral em até 7 dias, conforme o Código de Defesa do Consumidor.</p>
+    </div>
+  </div>
+</section>
+
+<section class="modal" id="modalPrivacy" role="dialog" aria-modal="true" aria-labelledby="privacyTitle" hidden>
+  <div class="modal-sheet modal-wide">
+    <button class="modal-close" data-close="modalPrivacy" type="button" aria-label="Fechar">✕</button>
+    <span class="modal-kicker">Documento legal</span>
+    <h2 id="privacyTitle">Política de privacidade</h2>
+    <div class="legal-copy">
+      <p>Coletamos nome, WhatsApp e histórico de consultas para operar o radar, prevenir fraude e melhorar a precisão dos resultados.</p>
+      <p>As buscas são armazenadas por 12 meses. Não vendemos dados pessoais a terceiros. Você pode solicitar exclusão pelo suporte.</p>
+      <p>O QR Code e o código PIX são gerados pelo parceiro de pagamentos e não armazenamos dados bancários.</p>
+      <p>Encarregado de dados: privacidade@zapradar.app.</p>
+    </div>
+  </div>
+</section>
+
+<section class="modal" id="modalUpgrade" role="dialog" aria-modal="true" aria-labelledby="upgradeTitle" hidden>
+  <div class="modal-sheet">
+    <button class="modal-close" data-close="modalUpgrade" type="button" aria-label="Fechar">✕</button>
+    <span class="modal-kicker">Validação extra</span>
+    <h2 id="upgradeTitle">A verificação precisa de mais um crédito</h2>
+    <p class="modal-sub" id="upgradeSub">A IA encontrou dois contatos com o mesmo perfil e precisa confirmar o titular antes de abrir a foto.</p>
+    <div class="upgrade-cost"><span id="upgradeCost">20</span> tokens</div>
+    <button class="btn btn-green btn-lg" id="upgradeConfirmBtn" type="button">Autorizar verificação</button>
+    <button class="link-btn" id="upgradeSkipBtn" type="button">Continuar com resultado parcial</button>
+  </div>
+</section>
+
+<div class="toast-stack" id="toastStack" aria-live="polite"></div>
+
+<script src="/acesso/app.js"></script>
+</body>
+</html>
