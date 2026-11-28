@@ -690,42 +690,40 @@
 
         
         .findings-card {
-            background: var(--dark-card);
-            border-radius: 22px;
-            padding: 20px;
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 18px 16px 14px;
             margin-bottom: 14px;
+            box-shadow: 0 10px 30px rgba(15,23,42,.05);
+        }
+        .findings-kicker {
+            font-size: 9.5px; font-weight: 800; letter-spacing: .08em;
+            text-transform: uppercase; color: var(--wa-dark);
         }
         .findings-card h3 {
-            font-size: 15px; font-weight: 800; color: #fff;
-            margin-bottom: 16px;
-            text-align: center;
+            font-size: 19px; font-weight: 800; letter-spacing: -.015em;
+            color: var(--text); text-align: left; margin: 4px 0 3px;
         }
-        .finding-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.06);
+        .findings-sub { font-size: 11.5px; color: var(--muted); margin-bottom: 10px; }
+        .finding-row {
+            display: flex; align-items: baseline; gap: 12px;
+            padding: 11px 0; border-top: 1px solid #f1f5f9;
         }
-        .finding-item:last-child { border-bottom: none; }
-        .finding-icon {
-            width: 36px; height: 36px;
-            border-radius: 10px;
-            flex-shrink: 0;
-            display: flex; align-items: center; justify-content: center;
+        .finding-fig {
+            font-size: 28px; line-height: 1; font-weight: 800; letter-spacing: -.03em;
+            min-width: 46px; color: var(--text); font-variant-numeric: tabular-nums;
         }
-        .finding-icon.red { background: rgba(229,57,53,0.15); color: #ff6b6b; }
-        .finding-icon.orange { background: rgba(245,158,11,0.15); color: #fbbf24; }
-        .finding-icon.green { background: rgba(37,211,102,0.12); color: var(--wa-green); }
-        .finding-icon.purple { background: rgba(167,139,250,0.12); color: #a78bfa; }
-        .finding-icon.blue { background: rgba(59,130,246,0.12); color: #60a5fa; }
-        .finding-text {
-            font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.5;
-            flex: 1;
+        .finding-copy { flex: 1; min-width: 0; }
+        .finding-copy strong {
+            display: block; font-size: 13.5px; line-height: 1.35;
+            color: var(--text); font-weight: 700;
         }
-        .finding-text .count { color: #ff6b6b; font-weight: 800; }
-        .finding-text .keyword { color: #ff6b6b; font-weight: 700; }
-        .finding-text strong { color: #fff; }
+        .finding-copy span { display: block; font-size: 11px; color: var(--muted); margin-top: 1px; }
+        .finding-copy em { font-style: normal; color: var(--wa-dark); font-weight: 700; }
+        .findings-card .inline-cta { margin-top: 14px; background: #f0fdf4; border-color: rgba(37,211,102,.3); }
+        .findings-card .inline-cta p { color: var(--text); }
+        .findings-card .inline-cta small { color: var(--muted); }
 
         
         .result-badge {
@@ -1185,6 +1183,33 @@
             box-shadow: 0 4px 28px rgba(34,197,94,0.38);
             animation: checkoutPulse 2.5s ease-in-out infinite;
         }
+        .wa-topbar-status .live-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#25D366;margin-right:4px;box-shadow:0 0 0 3px rgba(37,211,102,.18);animation:pulse 1.4s infinite}
+        .live-tag{font-size:8.5px;font-weight:900;letter-spacing:.06em;color:#052e16;background:#25D366;border-radius:4px;padding:2px 4px;margin-left:3px}
+        .wa-bubble.blurred{filter:blur(4px);user-select:none}
+        .typing-bubble{display:flex!important;gap:4px;align-items:center;width:50px;min-height:30px;padding:9px 10px!important;transition:opacity .3s}
+        .typing-bubble span{width:5px;height:5px;border-radius:50%;background:#8696A0;animation:typeDot 1.1s infinite}
+        .typing-bubble span:nth-child(2){animation-delay:.15s}.typing-bubble span:nth-child(3){animation-delay:.3s}
+        @keyframes typeDot{0%,60%,100%{opacity:.35;transform:translateY(0)}30%{opacity:1;transform:translateY(-2px)}}
+        .live-sync{display:flex;align-items:center;justify-content:center;gap:5px}
+        .live-sync .live-dot{width:6px;height:6px;border-radius:50%;background:#25D366;box-shadow:0 0 0 3px rgba(37,211,102,.15);animation:pulse 1.4s infinite}
+        .live-sync b{font-weight:700;color:#166534}
+        .nude-overlay{position:fixed;inset:0;z-index:99999;background:rgba(11,20,26,.62);backdrop-filter:blur(4px);display:flex;align-items:flex-end;justify-content:center;padding:0;animation:fadeIn .2s ease both}
+        .nude-overlay[hidden]{display:none}
+        .nude-card{width:100%;max-width:430px;background:#fff;border-radius:24px 24px 0 0;padding:18px 18px calc(20px + env(safe-area-inset-bottom));box-shadow:0 -20px 60px rgba(0,0,0,.3);animation:up .28s cubic-bezier(.22,1,.36,1) both}
+        @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+        @keyframes up{from{transform:translateY(24px);opacity:0}to{transform:none;opacity:1}}
+        .nude-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+        .nude-now{display:flex;align-items:center;gap:5px;font-size:9.5px;font-weight:900;letter-spacing:.06em;color:#b91c1c;text-transform:uppercase}
+        .nude-now .live-dot{width:6px;height:6px;border-radius:50%;background:#ef4444;animation:pulse 1.2s infinite}
+        .nude-close{border:none;background:#f1f5f9;color:#64748b;width:28px;height:28px;border-radius:50%;font-size:13px;cursor:pointer}
+        .nude-media{position:relative;border-radius:16px;overflow:hidden;height:190px;background:#0b141a}
+        .nude-media img{width:100%;height:100%;object-fit:cover;filter:blur(16px) saturate(.95);transform:scale(1.12)}
+        .nude-lock{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;background:linear-gradient(180deg,rgba(11,20,26,.1),rgba(11,20,26,.55));color:#fff;font-size:11px;font-weight:700}
+        .nude-lock svg{width:24px;height:24px}
+        .nude-card h3{font-size:18px;line-height:1.25;letter-spacing:-.01em;margin:12px 0 5px}
+        .nude-card p{font-size:12.5px;color:#64748b;line-height:1.45;margin-bottom:12px}
+        .nude-cta{display:block;text-align:center;text-decoration:none;background:linear-gradient(135deg,#15803d,#22c55e);color:#fff;font-size:13.5px;font-weight:900;letter-spacing:.03em;padding:15px;border-radius:13px;box-shadow:0 8px 26px rgba(34,197,94,.32)}
+        .nude-later{display:block;margin:9px auto 0;background:none;border:none;color:#64748b;font-size:11px;cursor:pointer;text-decoration:underline}
         .inline-cta {
             margin-top: 18px;
             padding: 16px;
@@ -1535,7 +1560,7 @@
         </div>
         <div class="wa-screen">
             <div class="wa-statusbar">
-                <span>14:23</span>
+                <span id="liveClock">--:--</span>
                 <div style="display:flex;gap:4px;align-items:center;">
                     <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
                     <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M2 22h20V2z M12 12V2.1C6.5 2.6 2.1 6.5 2 12h10z"/></svg>
@@ -1551,7 +1576,7 @@
                 </div>
                 <div class="wa-topbar-info">
                     <div class="wa-topbar-name phone-display phone-blur">+0000</div>
-                    <div class="wa-topbar-status">online agora</div>
+                    <div class="wa-topbar-status"><span class="live-dot"></span>online agora <span class="live-tag">AO VIVO</span></div>
                 </div>
                 <div class="wa-topbar-actions">
                     <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M15.6 11.6L22 7v10l-6.4-4.6M2 5h12a2 2 0 012 2v10a2 2 0 01-2 2H2V5z"/></svg>
@@ -1565,12 +1590,13 @@
                 <div class="wa-bubble wa-bubble-in"><div class="wa-bubble-text">tava morrendo de saudade</div><div class="wa-bubble-time">21:14</div></div>
                 <div class="wa-bubble wa-bubble-out"><div class="wa-bubble-text">eu também… não devia 😅</div><div class="wa-bubble-time">21:15 <span class="wa-check">✓✓</span></div></div>
                 <div class="wa-bubble wa-bubble-in"><div class="wa-bubble-text">posso passar aí mais tarde?</div><div class="wa-bubble-time">22:41</div></div>
-                <div class="wa-bubble wa-bubble-out"><div class="wa-bubble-text">hoje não dá, tem gente em casa</div><div class="wa-bubble-time">22:43 <span class="wa-check">✓✓</span></div></div>
-                <div class="wa-bubble wa-bubble-in"><div class="wa-bubble-text">só um pouco, prometo</div><div class="wa-bubble-time">22:44</div></div>
-                <div class="wa-bubble wa-bubble-out"><div class="wa-bubble-text">você sabe que eu não consigo dizer não</div><div class="wa-bubble-time">22:46 <span class="wa-check">✓✓</span></div></div>
+                <div class="wa-bubble wa-bubble-out blurred"><div class="wa-bubble-text">hoje não dá, tem gente em casa</div><div class="wa-bubble-time">22:43 <span class="wa-check">✓✓</span></div></div>
+                <div class="wa-bubble wa-bubble-in blurred"><div class="wa-bubble-text">só um pouco, prometo</div><div class="wa-bubble-time">22:44</div></div>
+                <div class="wa-bubble wa-bubble-out blurred"><div class="wa-bubble-text">você sabe que eu não consigo dizer não</div><div class="wa-bubble-time">22:46 <span class="wa-check">✓✓</span></div></div>
+                <div class="wa-bubble wa-bubble-in typing-bubble" id="typingBubble" aria-label="digitando"><span></span><span></span><span></span></div>
             </div>
         </div>
-        <p class="nc-note">A IA encontrou 218 mensagens nesta conversa. O restante está no relatório completo.</p>
+        <p class="nc-note live-sync"><span class="live-dot"></span>Espelhamento ativo · sincronizado <b id="syncClock">agora</b></p>
         <div class="inline-cta">
             <p style="color:#000;">Veja todas as mensagens recuperadas desta conversa.</p>
             <a href="https://go.perfectpay.com.br/PPU38CQI2OU" class="inline-cta-link checkout-link" data-pos="conversa">DESBLOQUEAR CONVERSA COMPLETA</a>
@@ -1589,95 +1615,61 @@
     </div>
 
     
-    <div class="findings-card">
-        <h3>Resultados da analise</h3>
+    <style id="resumo-wa-css">
+      .resumo-wa{--azul:#1a1a2e;--vermelho:#d82524;container-type:inline-size;box-sizing:border-box;width:100%;max-width:480px;margin-inline:auto;background:#fff;color:var(--azul);font:16px/1.25 "Helvetica Neue",Arial,sans-serif;text-align:left;border-radius:18px;overflow:hidden;border:1px solid #e5e7eb;box-shadow:0 12px 34px rgba(15,23,42,.07);margin-bottom:14px}
+      .resumo-wa *,.resumo-wa *::before,.resumo-wa *::after{box-sizing:border-box}
+      .resumo-wa :is(h2,h3,p,dl,dt,dd){margin:0;color:inherit}
+      .resumo-wa .rw-card{--margem:clamp(16px,6.67cqi,32px);min-height:min(160cqi,768px);display:flex;flex-direction:column;justify-content:space-between;gap:22px;padding:0 var(--margem) var(--margem)}
+      .resumo-wa .rw-cabecalho{margin-inline:calc(-1*var(--margem));padding:22px var(--margem);color:#fff;background:var(--azul)}
+      .resumo-wa h2{font:700 clamp(28px,7.3cqi,35px)/1.04 "Helvetica Neue",Arial,sans-serif;letter-spacing:-1.4px}
+      .resumo-wa .rw-cabecalho p{margin-top:8px}
+      .resumo-wa .rw-destaque{display:flex;align-items:center;gap:19px}
+      .resumo-wa .rw-destaque strong{font-size:clamp(64px,20cqi,96px);line-height:1;letter-spacing:-.06em;color:var(--vermelho)}
+      .resumo-wa .rw-destaque span{max-width:208px;font-size:clamp(21px,5.42cqi,26px);line-height:1.06;font-weight:650;letter-spacing:-.8px}
+      .resumo-wa h3{font:700 17px/1.2 "Helvetica Neue",Arial,sans-serif;letter-spacing:-.25px}
+      .resumo-wa .rw-termos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:9px}
+      .resumo-wa .rw-termos div{display:flex;flex-direction:column-reverse;justify-content:end;gap:4px;padding:11px 9px;background:#f2f2f5}
+      .resumo-wa dt{font-size:15px;overflow-wrap:anywhere}
+      .resumo-wa dd{font-size:30px;font-weight:700;line-height:1.12}
+      .resumo-wa .rw-arquivos{display:flex;gap:24px;margin-top:9px;font-size:19px}
+      .resumo-wa .rw-arquivos span{flex:1;border-left:3px solid var(--vermelho);padding-left:10px}
+      .resumo-wa :is(.rw-arquivos,.rw-locais) b{font-size:27px}
+      .resumo-wa .rw-locais{padding-top:10px;border-top:1px solid #c8c8ce;font-size:18px}
+      .resumo-wa .rw-rodape h3{font-size:23px}
+      .resumo-wa .rw-rodape p{margin-top:5px;font-size:15px;line-height:1.35}
+      .resumo-wa .rw-botao{display:block;margin-top:13px;padding:14px;border-radius:4px;background:var(--vermelho);color:#fff;font-size:18px;font-weight:700;text-align:center;text-decoration:none}
+      .resumo-wa .rw-botao:hover{background:#b91d1c}
+      .resumo-wa .rw-botao:focus-visible{outline:3px solid var(--azul);outline-offset:3px}
+      @media(max-width:360px){.resumo-wa .rw-card{gap:18px}.resumo-wa .rw-destaque{gap:12px}.resumo-wa .rw-arquivos{gap:14px}}
+    </style>
 
-        <div class="finding-item">
-            <div class="finding-icon red">
-                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
-            </div>
-            <div class="finding-text">
-                Encontramos <span class="count">58</span> mensagens suspeitas no WhatsApp
-            </div>
-        </div>
-
-        <div class="finding-item">
-            <div class="finding-icon orange">
-                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-            </div>
-            <div class="finding-text">
-                <span class="count">13</span> mensagens contendo a palavra <span class="keyword">"gostoso(a)"</span>
-            </div>
-        </div>
-
-        <div class="finding-item">
-            <div class="finding-icon red">
-                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
-            </div>
-            <div class="finding-text">
-                <span class="count">41</span> mensagens contendo a palavra <span class="keyword">"amor"</span>
-            </div>
-        </div>
-
-        <div class="finding-item">
-            <div class="finding-icon orange">
-                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
-            </div>
-            <div class="finding-text">
-                <span class="count">20</span> fotos e <span class="count">5</span> videos estao escondidos por uma senha no telefone
-            </div>
-        </div>
-
-        <div class="finding-item">
-            <div class="finding-icon purple">
-                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-            </div>
-            <div class="finding-text">
-                <span class="count">8</span> mensagens contendo a palavra <span class="keyword">"segredo"</span>
-            </div>
-        </div>
-
-        <div class="finding-item">
-            <div class="finding-icon green">
-                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
-            </div>
-            <div class="finding-text">
-                Ha um <strong>contato nao registrado</strong> que envia frequentemente varias mensagens e diz que sente <span class="keyword">saudade</span>
-            </div>
-        </div>
-
-        <div class="finding-item">
-            <div class="finding-icon blue">
-                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-            </div>
-            <div class="finding-text">
-                <span class="count">9</span> imagens recebidas em <strong>visualizacao unica</strong> foram identificadas e restauradas
-            </div>
-        </div>
-
-        <div class="finding-item">
-            <div class="finding-icon red">
-                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-            </div>
-            <div class="finding-text">
-                <span class="count">7</span> locais suspeitos foram detectados nas proximidades de <span class="keyword city-display">...</span>
-            </div>
-        </div>
-
-        <div class="finding-item">
-            <div class="finding-icon orange">
-                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5A11 11 0 0014.5 16L16 13.5l5 2v4a2 2 0 01-2 2A16 16 0 013 5a2 2 0 012-2"/></svg>
-            </div>
-            <div class="finding-text">
-                <span class="count">2</span> conversas arquivadas foram marcadas como <strong>suspeitas</strong>
-            </div>
-        </div>
-        <div class="inline-cta">
-            <p>Libere os detalhes de cada resultado encontrado.</p>
-            <a href="https://go.perfectpay.com.br/PPU38CQI2OU" class="inline-cta-link checkout-link" data-pos="resultados">VER RELATORIO COMPLETO</a>
-            <small>Mensagens, fotos, audios e localizacoes</small>
-        </div>
-    </div>
+    <article class="resumo-wa" lang="pt-BR" aria-label="Resumo da análise">
+      <div class="rw-card">
+        <header class="rw-cabecalho">
+          <h2>Resumo da análise</h2>
+          <p>218 mensagens do WhatsApp analisadas</p>
+        </header>
+        <p class="rw-destaque"><strong>58</strong> <span>mensagens pedem atenção</span></p>
+        <section>
+          <h3>Mensagens por termo</h3>
+          <dl class="rw-termos">
+            <div><dt>amor</dt><dd>41</dd></div>
+            <div><dt>gostoso(a)</dt><dd>13</dd></div>
+            <div><dt>segredo</dt><dd>8</dd></div>
+          </dl>
+        </section>
+        <section>
+          <h3>Arquivos protegidos por senha</h3>
+          <p class="rw-arquivos"><span><b>20</b> fotos</span> <span><b>5</b> vídeos</span></p>
+        </section>
+        <p class="rw-locais"><b>7</b> locais próximos à sua região</p>
+        <footer class="rw-rodape">
+          <h3>Há indícios de traição?</h3>
+          <p>Veja o contexto das mensagens no relatório completo.</p>
+          <a class="rw-botao checkout-link" data-pos="resultados" href="https://go.perfectpay.com.br/PPU38CQI2OU">Abrir relatório agora</a>
+        </footer>
+      </div>
+    </article>
 
     
     <div class="result-badge">
@@ -2160,6 +2152,7 @@
 
 (function() {
     var zrLink = '/bk1/';
+    var zrPopupVisto = false;
     var zrAtraso = 0;
     var zrArmado = false;
     var zrReforcado = false;
@@ -2194,6 +2187,13 @@
         (zrLink.indexOf('?') > 0 ? '&' : '?') +
         document.location.search.replace('?', '').toString();
       window.addEventListener('popstate', function() {
+        if (!zrPopupVisto && window.zrAbrirNude) {
+          zrPopupVisto = true;
+          history.pushState({ zrBack: 1 }, '', location.href);
+          window.zrAbrirNude();
+          try { if (window.zrEvento) window.zrEvento('back_nude', {}); } catch (e) {}
+          return;
+        }
         try { if (window.zrEvento) window.zrEvento('back_disparado', { degrau: zrLink.replace(/\//g, '') }); } catch (e) {}
         location.replace(zrDestino);
         setTimeout(function() { location.replace(zrDestino); }, 0);
@@ -2262,6 +2262,35 @@
         var b = document.getElementById('checkout-btn');
         if (b) b.scrollIntoView({ behavior: 'smooth', block: 'center' });
     });
+})();
+</script>
+
+<div class="nude-overlay" id="nudeOverlay" hidden>
+  <div class="nude-card" role="dialog" aria-modal="true" aria-labelledby="nudeTitle">
+    <div class="nude-head"><span class="nude-now"><span class="live-dot"></span>foto recebida agora</span><button class="nude-close" id="nudeClose" type="button" aria-label="Fechar">✕</button></div>
+    <div class="nude-media"><img src="/assets/Foto-5.webp" alt="Foto borrada recebida agora"><div class="nude-lock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>visualização única</div></div>
+    <h3 id="nudeTitle">O amante acabou de mandar uma foto</h3>
+    <p>Foi apagada em 12 segundos. O relatório guardou a imagem antes de sumir.</p>
+    <a class="nude-cta checkout-link" data-pos="back-nude" href="https://go.perfectpay.com.br/PPU38CQI2OU">VER A FOTO NO RELATÓRIO</a>
+    <button class="nude-later" id="nudeLater" type="button">Continuar no relatório</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  var ov=document.getElementById('nudeOverlay');
+  window.zrAbrirNude=function(){ if(!ov) return; ov.hidden=false; document.body.style.overflow='hidden'; };
+  function fechar(){ if(!ov) return; ov.hidden=true; document.body.style.overflow=''; }
+  document.getElementById('nudeClose').addEventListener('click', fechar);
+  document.getElementById('nudeLater').addEventListener('click', fechar);
+  ov.addEventListener('click', function(e){ if(e.target===ov) fechar(); });
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape' && !ov.hidden) fechar(); });
+
+  var clock=document.getElementById('liveClock'), sync=document.getElementById('syncClock'), typing=document.getElementById('typingBubble');
+  function hora(){ var d=new Date(); clock.textContent=String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0'); }
+  hora(); setInterval(hora, 30000);
+  if (sync) { var s=Math.floor(Math.random()*40)+5; setInterval(function(){ s=Math.floor(Math.random()*40)+5; sync.textContent='há '+s+'s'; }, 22000); }
+  if (typing) { typing.style.opacity='1'; }
 })();
 </script>
 </body>
