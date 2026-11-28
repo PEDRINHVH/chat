@@ -349,7 +349,6 @@
     $('#paywallSub').textContent = state.wl
       ? 'Você já tem uma vaga reservada. Assim que ela abrir, o saldo é renovado e a análise continua de onde parou.'
       : 'Sua análise continua na fila. Entre na lista de liberação e o saldo é renovado quando uma vaga abrir.';
-    renderPacks();
     if (state.wl) wlJoinedUI(); else wlResetUI();
     openModal('modalPaywall');
   }
@@ -394,41 +393,87 @@
     $('#wlAhead').textContent = Math.max(0, wl.position - 1) + ' na frente';
     $('#wlFill').style.width = wlFill(wl.position) + '%';
     $('#wlText').textContent = wlText(wl.position);
+    $('#wlMailAddr').textContent = state.email || 'seu e-mail';
   }
 
   function wlResetUI() {
-    $('#waitlistBox').classList.remove('is-joined');
-    $('#wlStatus').hidden = true;
+    clearInterval(wlTick);
+    clearInterval(wlHold);
+    clearInterval(wlRefresh);
+    $('#waitlistBox').classList.remove('is-joined', 'is-expired');
+    ['#wlStatus', '#wlVerify', '#wlHold', '#wlMail'].forEach(function (q) { const e = $(q); if (e) e.hidden = true; });
     $('#wlBadge').textContent = 'aberta';
     $('#wlBtn').disabled = false;
     $('#wlBtn').textContent = 'Entrar na fila de liberação';
     $('#wlText').textContent = 'Seu acesso gratuito terminou. Entre na fila: quando uma vaga abrir, seu saldo é renovado e você continua de onde parou.';
-    clearInterval(wlTick);
   }
 
   function wlJoinedUI() {
+    const wl = state.wl;
+    if (!wl) return;
     $('#waitlistBox').classList.add('is-joined');
     $('#wlStatus').hidden = false;
-    $('#wlBadge').textContent = 'na fila';
     $('#wlBtn').disabled = true;
-    $('#wlBtn').textContent = 'Vaga reservada';
+    $('#wlBtn').textContent = wl.stage === 'verify' ? 'Aguardando confirmação' : 'Vaga reservada';
+    $('#wlVerify').hidden = wl.stage !== 'verify';
+    $('#wlMail').hidden = wl.stage !== 'queue';
+    $('#wlHold').hidden = wl.stage !== 'queue';
+    $('#wlBadge').textContent = wl.expired ? 'expirada' : (wl.stage === 'verify' ? 'confirmar' : 'na fila');
+    $('#waitlistBox').classList.toggle('is-expired', !!wl.expired);
+    if (wl.expired) {
+      $('#wlBtn').disabled = false;
+      $('#wlBtn').textContent = 'Entrar novamente';
+    }
     wlRender();
+    if (wl.stage === 'queue' && !wl.expired) {
+      wlTick = setInterval(wlStep, 2400);
+      wlHold = setInterval(wlHoldStep, 1000);
+      wlRefresh = setInterval(wlServerSync, 15000);
+    }
   }
 
-  let wlTick = null;
-  function startWlTimer() {
-    clearInterval(wlTick);
-    wlTick = setInterval(function () {
-      if (!state.wl) return clearInterval(wlTick);
-      if (state.wl.position <= 1) { wlRender(); return; }
-      state.wl.position = Math.max(1, state.wl.position - (state.wl.position > 34 ? 2 : 1));
+  function wlStep() {
+    const wl = state.wl;
+    if (!wl || wl.stage !== 'queue' || wl.expired) return;
+    if (wl.position > 1) {
+      wl.position = Math.max(1, wl.position - (wl.position > 34 ? 2 : 1));
       save();
       wlRender();
-    }, 2200);
+    }
   }
 
+  function wlHoldStep() {
+    const wl = state.wl;
+    if (!wl || !wl.holdUntil) return;
+    const left = Math.max(0, Math.floor((wl.holdUntil - Date.now()) / 1000));
+    $('#wlHoldClock').textContent = String(Math.floor(left / 60)).padStart(2, '0') + ':' + String(left % 60).padStart(2, '0');
+    if (left === 0 && !wl.expired) {
+      wl.expired = true;
+      save();
+      wlJoinedUI();
+      toast('Sua vaga expirou. Entre novamente para pegar outra posição.', 'error');
+    }
+  }
+
+  async function wlServerSync() {
+    const wl = state.wl;
+    if (!wl || wl.stage !== 'queue' || wl.expired) return;
+    try {
+      const r = await fetch('/api/waitlist?account_id=' + encodeURIComponent(wl.account_id));
+      if (!r.ok) return;
+      const d = await r.json();
+      if (d.position) {
+        wl.position = Math.max(1, Math.min(wl.position, d.position));
+        save();
+        wlRender();
+      }
+    } catch (e) {}
+  }
+
+  let wlTick = null, wlHold = null, wlRefresh = null;
+
   async function joinWaitlist() {
-    if (state.wl) return;
+    if (state.wl && !state.wl.expired) return;
     $('#wlBtn').disabled = true;
     const id = state.accountId || await createAccount();
     if (!id) {
@@ -444,15 +489,24 @@
       });
       if (!r.ok) throw new Error('http');
       const d = await r.json();
-      state.wl = { account_id: id, position: d.position, since: d.since || new Date().toISOString(), joined: Date.now() };
+      state.wl = { account_id: id, position: d.position, since: d.since || new Date().toISOString(), joined: Date.now(), stage: 'verify', expired: false };
       save();
       wlJoinedUI();
-      startWlTimer();
-      toast('Vaga reservada. Você está na fila de liberação.', 'success');
+      toast('Vaga pré-reservada. Falta confirmar.', 'success');
     } catch (e) {
       $('#wlBtn').disabled = false;
       toast('Fila indisponível agora. Tente novamente.', 'error');
     }
+  }
+
+  function confirmWaitlist() {
+    const wl = state.wl;
+    if (!wl || wl.stage !== 'verify') return;
+    wl.stage = 'queue';
+    wl.holdUntil = Date.now() + 15 * 60 * 1000;
+    save();
+    wlJoinedUI();
+    toast('Vaga reservada e confirmação enviada para ' + (state.email || 'seu e-mail'), 'success');
   }
 
   function renderPacks() {
@@ -896,6 +950,11 @@
         state.referrals.signups++;
         state.referrals.tokens += 75;
         credit(75, 'Seu convite foi aceito · +75 tokens');
+        if (state.wl && state.wl.stage === 'queue' && !state.wl.expired) {
+          state.wl.position = Math.max(1, state.wl.position - 40);
+          wlRender();
+          toast('Prioridade aplicada: você subiu 40 posições na fila.', 'success');
+        }
         save();
       }
     }, 4200);
@@ -1001,37 +1060,9 @@
     $('#walletBtn').addEventListener('click', () => { openPaywall(state.tokens < 20 ? 20 : 0); });
     $('#buyTokensBtn').addEventListener('click', openPaywall);
     $('#wlBtn').addEventListener('click', joinWaitlist);
+    $('#wlConfirm').addEventListener('click', confirmWaitlist);
     $('#wlRef').addEventListener('click', openReferral);
     $('#wlBonus').addEventListener('click', claimBonus);
-    $('#packList').addEventListener('click', (e) => {
-      const p = e.target.closest('[data-pack]');
-      if (p) selectPack(p.dataset.pack);
-    });
-    $('#packList').addEventListener('keydown', (e) => {
-      if (e.key !== 'Enter' && e.key !== ' ') return;
-      const p = e.target.closest('[data-pack]');
-      if (p) { e.preventDefault(); selectPack(p.dataset.pack); }
-    });
-
-    $('#couponBtn').addEventListener('click', () => {
-      const v = $('#couponInput').value.trim().toUpperCase();
-      if (couponApplied) return toast('Cupom já aplicado');
-      if (v === 'GOD' || v === '#GOD') {
-        couponApplied = true;
-        toast('Cupom GOD aplicado · +30% de tokens', 'success');
-        $('#couponBtn').textContent = 'Aplicado';
-        $('#couponBtn').disabled = true;
-      } else if (v) {
-        toast('Cupom inválido', 'error');
-      }
-    });
-
-    $('#copyPixBtn').addEventListener('click', () => {
-      copy($('#pixCode').textContent);
-      toast('Código PIX copiado');
-    });
-    $('#simulatePayBtn').addEventListener('click', () => confirmPayment(true));
-
     $('#loverPhotoBtn').addEventListener('click', unlockLoverPhoto);
     $('#conversationBtn').addEventListener('click', unlockConversation);
     $('#newSearchBtn').addEventListener('click', () => { setScreen('screenHome'); $('#personPhone').focus(); });
