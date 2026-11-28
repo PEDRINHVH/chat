@@ -1692,6 +1692,7 @@
         lsSet('wa_country', JSON.stringify(COUNTRY));
 
 
+        lsSet('wa_estado', JSON.stringify({ display: display, digits: digits, start: Date.now(), done: false }));
         startAnalysis(display, digits);
 
 
@@ -2070,6 +2071,10 @@
     function finalizar(pelaMarca) {
         if (finalizado) return;
         finalizado = true;
+        try {
+            const st = JSON.parse(lsGet('wa_estado') || 'null');
+            if (st) { st.done = true; lsSet('wa_estado', JSON.stringify(st)); }
+        } catch (e) {}
         if (!pelaMarca) lsSet('pitch_visto:' + PLAYER_ID, String(Date.now()));
         fracaoMax = 1;
 
@@ -2136,6 +2141,30 @@
         window.location.href = (btn.dataset.href && btn.dataset.href.split('?')[0] || '/try/cta') + '?' + forward.toString();
     });
 
+    function restaurarEstado() {
+        let st = null;
+        try { st = JSON.parse(lsGet('wa_estado') || 'null'); } catch (e) { return; }
+        if (!st || !st.start || !st.digits) return;
+        if (Date.now() - st.start > 2 * 60 * 60 * 1000) return;
+        if (lsGet('wa_digits') !== st.digits) return;
+        const display = st.display || ('+55 ' + st.digits);
+        ultimoPhoneDisplay = display;
+        phoneInput.value = String(display).replace(/^\+55\s*/, '');
+        startAnalysis(display, st.digits);
+        analysisStartTime = st.start;
+        fetchProfileInBackground(st.digits);
+        const decorrido = Math.min((Date.now() - st.start) / 1000, PITCH_SEGUNDOS);
+        requestAnimationFrame(function () {
+            pintar(decorrido / PITCH_SEGUNDOS);
+            if (!finalizado && oPlayer) {
+                try { oPlayer.seek(decorrido); } catch (e) {}
+                oPlayer.mute();
+                oPlayer.play();
+            }
+        });
+    }
+
+    restaurarEstado();
 })();
 </script>
 </body>
