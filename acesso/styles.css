@@ -923,24 +923,23 @@ img { max-width: 100%; display: block; }
 .coupon-row .field { flex: 1; }
 .trust-row { display: flex; justify-content: space-between; font-size: 9.5px; color: var(--text-muted); margin-top: 11px; }
 
-#payEmailRow { margin-bottom: 12px; }
-#payEmailRow .field { margin-bottom: 0; }
-.pp-element {
-  min-height: 120px;
-  background: #fff;
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 12px;
-  margin-bottom: 12px;
-}
-.pp-message {
-  min-height: 15px;
-  margin: 8px 0 0;
-  font-size: 11px;
-  line-height: 1.4;
-  color: var(--danger);
-  text-align: center;
-}
+.waitlist{background:#f8fafc;border:1px solid var(--border);border-radius:16px;padding:14px;margin-bottom:12px}
+.wl-head{display:flex;align-items:center;gap:7px;margin-bottom:6px}
+.wl-dot{width:7px;height:7px;border-radius:50%;background:var(--wa-green);box-shadow:0 0 0 3px rgba(37,211,102,.18);animation:pulse 1.5s infinite;flex:none}
+.wl-head strong{font-size:13px}
+.wl-badge{margin-left:auto;font-size:8.5px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:var(--wa-dark);background:rgba(37,211,102,.14);border-radius:999px;padding:3px 7px}
+.waitlist.is-joined .wl-badge{background:#dcfce7;color:#166534}
+.wl-text{font-size:11.5px;line-height:1.5;color:var(--text-muted);margin-bottom:11px}
+.wl-status{margin-bottom:11px}
+.wl-row{display:flex;justify-content:space-between;align-items:baseline;font-size:11px;color:var(--text-muted)}
+.wl-row strong{font-size:22px;font-weight:800;letter-spacing:-.02em;color:var(--text-dark);font-variant-numeric:tabular-nums}
+.wl-meter{height:6px;border-radius:999px;background:#e2e8f0;overflow:hidden;margin:6px 0}
+.wl-meter i{display:block;height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,var(--wa-dark),var(--wa-green));transition:width .5s ease}
+.wl-foot{font-size:10px}
+.wl-perks{display:flex;gap:7px;margin-top:9px}
+.wl-perks .btn{flex:1}
+#wlBtn{width:100%}
+#wlBtn:disabled{opacity:.7}
 .checkout-summary {
   display: flex; justify-content: space-between; align-items: center;
   background: #f8fafc; border: 1px solid var(--border);

@@ -1,0 +1,12 @@
+{
+  "name": "zapradar-localizador",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "build": "echo build-ok",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "pg": "^8.16.3"
+  }
+}

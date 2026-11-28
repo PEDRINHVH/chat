@@ -54,8 +54,6 @@
   let pendingSkip = null;
   let selectedPack = PACKS[1];
   let couponApplied = false;
-  let ppConfig = null;
-  let ppSdkPromise = null;
   let pixInterval = null;
   let queueInterval = null;
   let tickerInterval = null;
@@ -70,6 +68,9 @@
       history: [],
       referrals: { clicks: 0, signups: 0, tokens: 0 },
       lastBonus: null,
+      email: '',
+      accountId: null,
+      wl: null,
       refCode: 'ZD' + Math.floor(100000 + Math.random() * 899999),
       refApplied: false,
       searchesToday: 0
@@ -342,170 +343,116 @@
 
   function openPaywall(need) {
     const needEl = $('#paywallNeed');
-    if (needEl) needEl.textContent = need > 0 ? 'Faltam ' + need + ' tokens' : 'Escolha um pacote para recarregar';
+    if (needEl) needEl.textContent = need > 0 ? 'Faltam ' + need + ' tokens' : 'Seu saldo gratuito chegou ao fim';
     $('#paywallBalance').textContent = state.tokens + ' tokens';
     $('#meterFill').style.width = Math.min(100, (state.tokens / 100) * 100) + '%';
-    $('#paywallSub').textContent = need <= 0
-      ? 'Mantenha seu radar ativo. Quanto maior o pacote, menor o custo por token.'
-      : state.tokens > 0
-        ? 'Seu plano FREE chegou ao fim e ainda faltam ' + need + ' tokens para concluir esta análise.'
-        : 'Você usou todos os 100 tokens de boas-vindas. Recarregue para continuar a análise deste registro.';
+    $('#paywallSub').textContent = state.wl
+      ? 'Você já tem uma vaga reservada. Assim que ela abrir, o saldo é renovado e a análise continua de onde parou.'
+      : 'Sua análise continua na fila. Entre na lista de liberação e o saldo é renovado quando uma vaga abrir.';
     renderPacks();
-    if (ppConfig) applyPpConfig();
-    else loadPpConfig();
+    if (state.wl) wlJoinedUI(); else wlResetUI();
     openModal('modalPaywall');
   }
 
-  function applyPpConfig() {
-    const row = $('#payEmailRow');
-    if (row) row.hidden = !ppConfig.configured;
-    const btn = $('#paywallBuyBtn');
-    if (btn) btn.textContent = ppConfig.configured ? 'Pagar com PerfectPay' : 'Pagar com PIX';
-  }
-
-  async function loadPpConfig() {
+  async function createAccount() {
+    if (state.accountId) return state.accountId;
     try {
-      const r = await fetch('/api/pp-config');
-      ppConfig = await r.json();
-    } catch (e) {
-      ppConfig = { configured: false };
-    }
-    applyPpConfig();
-    return ppConfig;
-  }
-
-  function ppTotal() {
-    return selectedPack.tokens + selectedPack.bonus + (couponApplied ? Math.round(selectedPack.tokens * 0.3) : 0);
-  }
-
-  function loadPerfectSdk(url) {
-    if (window.Perfect) return Promise.resolve();
-    if (ppSdkPromise) return ppSdkPromise;
-    ppSdkPromise = new Promise((resolve, reject) => {
-      const s = document.createElement('script');
-      s.src = url;
-      s.async = true;
-      s.onload = resolve;
-      s.onerror = () => { ppSdkPromise = null; reject(new Error('sdk')); };
-      document.head.appendChild(s);
-    });
-    return ppSdkPromise;
-  }
-
-  async function beginPayment() {
-    if (!ppConfig) await loadPpConfig();
-    if (!ppConfig.configured) { openCheckout(); return; }
-    const email = ($('#payEmail').value || '').trim();
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      toast('Informe um e-mail válido para o recibo', 'error');
-      $('#payEmail').focus();
-      return;
-    }
-    state.email = email;
-    save();
-    const started = await startPerfectPayment();
-    if (!started) toast('Gateway indisponível no momento. Usando PIX.', 'error');
-  }
-
-  async function startPerfectPayment() {
-    try {
-      const res = await fetch('/api/pp-create', {
+      const r = await fetch('/api/account', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ pack: selectedPack.id, name: state.name, email: state.email, phone: state.phone })
+        body: JSON.stringify({ name: state.name, email: state.email, phone: state.phone })
       });
-      const data = await res.json();
-      if (!res.ok || !data.client_secret) return false;
-      await loadPerfectSdk(ppConfig.sdkUrl);
-      if (!window.Perfect) return false;
-      const perfect = window.Perfect({ publishableKey: data.publicKey }, { customBackendUrl: data.apiBase });
-      const widgets = perfect.widgets({ clientSecret: data.client_secret, appearance: { labels: 'floating' } });
-      const total = ppTotal();
-      $('#ppPack').textContent = fmt(total) + ' tokens';
-      $('#ppPrice').textContent = selectedPack.label;
-      $('#perfectElement').innerHTML = '';
-      $('#ppMessage').textContent = '';
-      $('#ppPayBtn').disabled = false;
-      const element = widgets.create('payment', {
-        wallets: {
-          walletReturnUrl: location.origin,
-          applePay: 'auto',
-          googlePay: 'auto',
-          style: { theme: 'default', type: 'default', height: 55 }
+      if (r.ok) {
+        const d = await r.json();
+        if (d.account_id) {
+          state.accountId = d.account_id;
+          save();
+          return d.account_id;
         }
-      });
-      element.mount('#perfectElement');
-      closeModal('modalPaywall');
-      openModal('modalPerfectPay');
-      localStorage.setItem('pp_pending', JSON.stringify({
-        client_secret: data.client_secret,
-        pack: selectedPack.id,
-        apiBase: data.apiBase,
-        publicKey: data.publicKey,
-        sdkUrl: ppConfig.sdkUrl,
-        total
-      }));
-      $('#ppPayBtn').onclick = async () => {
-        $('#ppPayBtn').disabled = true;
-        $('#ppMessage').textContent = 'Processando...';
-        try {
-          const out = await perfect.confirmPayment({
-            elements: widgets,
-            confirmParams: { return_url: location.origin + '/acesso/?pagamento=retorno' }
-          });
-          if (out && out.error) {
-            $('#ppMessage').textContent = out.error.message || 'Pagamento não concluído.';
-            $('#ppPayBtn').disabled = false;
-            return;
-          }
-          const check = await perfect.retrievePaymentIntent(data.client_secret);
-          const status = check && check.paymentIntent && check.paymentIntent.status;
-          if (status === 'succeeded') finalizePpPayment();
-          else if (status === 'requires_customer_action') $('#ppMessage').textContent = 'Siga as instruções do pagamento.';
-          else if (status === 'processing') $('#ppMessage').textContent = 'Pagamento em processamento. O saldo entra assim que aprovado.';
-          else { $('#ppMessage').textContent = 'Pagamento não aprovado. Tente novamente.'; $('#ppPayBtn').disabled = false; }
-        } catch (e) {
-          $('#ppMessage').textContent = 'Falha ao processar o pagamento.';
-          $('#ppPayBtn').disabled = false;
-        }
-      };
-      return true;
-    } catch (e) {
-      return false;
-    }
-  }
-
-  function finalizePpPayment() {
-    let pending = null;
-    try { pending = JSON.parse(localStorage.getItem('pp_pending') || 'null'); } catch (e) {}
-    const total = pending && pending.total ? pending.total : ppTotal();
-    localStorage.removeItem('pp_pending');
-    credit(total, '+' + fmt(total) + ' tokens adicionados ao saldo');
-    closeModal('modalPerfectPay');
-    setTimeout(() => {
-      if (pendingAction) {
-        const fn = pendingAction;
-        pendingAction = null;
-        pendingSkip = null;
-        fn();
       }
-    }, 900);
+    } catch (e) {}
+    return null;
   }
 
-  async function resumePendingPayment() {
-    let pending = null;
-    try { pending = JSON.parse(localStorage.getItem('pp_pending') || 'null'); } catch (e) { return; }
-    if (!pending || !pending.client_secret) return;
+  function wlFill(pos) {
+    return Math.max(6, Math.min(99.5, 100 - pos / 2));
+  }
+
+  function wlText(pos) {
+    if (pos <= 1) return 'É a sua vez. Estamos preparando a liberação do saldo.';
+    if (pos <= 12) return 'Você está quase. Não feche esta tela.';
+    if (pos <= 45) return 'Sua vaga está sendo confirmada pela plataforma.';
+    if (pos <= 120) return 'Você entrou na fila. Estamos te posicionando.';
+    return 'Sua vaga foi reservada. A fila anda conforme as liberações.';
+  }
+
+  function wlRender() {
+    const wl = state.wl;
+    if (!wl) return;
+    $('#wlPos').textContent = wl.position + 'º';
+    $('#wlEta').textContent = 'Previsão: ' + Math.max(1, Math.round(wl.position / 30)) + ' min';
+    $('#wlAhead').textContent = Math.max(0, wl.position - 1) + ' na frente';
+    $('#wlFill').style.width = wlFill(wl.position) + '%';
+    $('#wlText').textContent = wlText(wl.position);
+  }
+
+  function wlResetUI() {
+    $('#waitlistBox').classList.remove('is-joined');
+    $('#wlStatus').hidden = true;
+    $('#wlBadge').textContent = 'aberta';
+    $('#wlBtn').disabled = false;
+    $('#wlBtn').textContent = 'Entrar na fila de liberação';
+    $('#wlText').textContent = 'Seu acesso gratuito terminou. Entre na fila: quando uma vaga abrir, seu saldo é renovado e você continua de onde parou.';
+    clearInterval(wlTick);
+  }
+
+  function wlJoinedUI() {
+    $('#waitlistBox').classList.add('is-joined');
+    $('#wlStatus').hidden = false;
+    $('#wlBadge').textContent = 'na fila';
+    $('#wlBtn').disabled = true;
+    $('#wlBtn').textContent = 'Vaga reservada';
+    wlRender();
+  }
+
+  let wlTick = null;
+  function startWlTimer() {
+    clearInterval(wlTick);
+    wlTick = setInterval(function () {
+      if (!state.wl) return clearInterval(wlTick);
+      if (state.wl.position <= 1) { wlRender(); return; }
+      state.wl.position = Math.max(1, state.wl.position - (state.wl.position > 34 ? 2 : 1));
+      save();
+      wlRender();
+    }, 2200);
+  }
+
+  async function joinWaitlist() {
+    if (state.wl) return;
+    $('#wlBtn').disabled = true;
+    const id = state.accountId || await createAccount();
+    if (!id) {
+      $('#wlBtn').disabled = false;
+      toast('Não foi possível entrar na fila agora. Tente novamente.', 'error');
+      return;
+    }
     try {
-      if (!ppConfig) await loadPpConfig();
-      await loadPerfectSdk(pending.sdkUrl || ppConfig.sdkUrl);
-      if (!window.Perfect) return;
-      const perfect = window.Perfect({ publishableKey: pending.publicKey || ppConfig.publicKey }, { customBackendUrl: pending.apiBase || ppConfig.apiBase });
-      const result = await perfect.retrievePaymentIntent(pending.client_secret);
-      const status = result && result.paymentIntent && result.paymentIntent.status;
-      if (status === 'succeeded') finalizePpPayment();
-      else if (status === 'failed' || status === 'expired') localStorage.removeItem('pp_pending');
-    } catch (e) {}
+      const r = await fetch('/api/waitlist', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ account_id: id })
+      });
+      if (!r.ok) throw new Error('http');
+      const d = await r.json();
+      state.wl = { account_id: id, position: d.position, since: d.since || new Date().toISOString(), joined: Date.now() };
+      save();
+      wlJoinedUI();
+      startWlTimer();
+      toast('Vaga reservada. Você está na fila de liberação.', 'success');
+    } catch (e) {
+      $('#wlBtn').disabled = false;
+      toast('Fila indisponível agora. Tente novamente.', 'error');
+    }
   }
 
   function renderPacks() {
@@ -1000,16 +947,23 @@
   }
 
   function bind() {
-    $('#onboardForm').addEventListener('submit', (e) => {
+    $('#onboardForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const name = $('#onboardName').value.trim();
       const phone = $('#onboardPhone').value.replace(/\D/g, '');
+      const email = $('#onboardEmail').value.trim().toLowerCase();
       if (name.length < 2 || phone.length < 10) {
         toast('Preencha seu nome e um WhatsApp válido', 'error');
         return;
       }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+        toast('Informe um e-mail válido', 'error');
+        $('#onboardEmail').focus();
+        return;
+      }
       state.name = name;
       state.phone = phone;
+      state.email = email;
       state.onboarded = true;
       const ref = new URLSearchParams(location.search).get('ref');
       if (ref) {
@@ -1020,6 +974,9 @@
       closeModal('modalOnboarding');
       renderWallet();
       toast(ref ? 'Acesso ativado · +125 tokens (bônus de indicação)' : 'Acesso ativado · 100 tokens de boas-vindas', 'success');
+      createAccount().then(function (id) {
+        if (!id) setTimeout(function () { toast('Conta salva localmente. A fila será criada na próxima tentativa.'); }, 2200);
+      });
       if (ref) setTimeout(() => toast('Convite validado. Você também pode indicar e ganhar.'), 2600);
     });
 
@@ -1043,7 +1000,9 @@
 
     $('#walletBtn').addEventListener('click', () => { openPaywall(state.tokens < 20 ? 20 : 0); });
     $('#buyTokensBtn').addEventListener('click', openPaywall);
-    $('#paywallBuyBtn').addEventListener('click', beginPayment);
+    $('#wlBtn').addEventListener('click', joinWaitlist);
+    $('#wlRef').addEventListener('click', openReferral);
+    $('#wlBonus').addEventListener('click', claimBonus);
     $('#packList').addEventListener('click', (e) => {
       const p = e.target.closest('[data-pack]');
       if (p) selectPack(p.dataset.pack);
@@ -1157,8 +1116,6 @@
     renderHistory();
     renderBonus();
     startTicker();
-    loadPpConfig();
-    resumePendingPayment();
     $('#tickerText').style.transition = 'opacity .25s';
     if (!state.onboarded) {
       setTimeout(() => openModal('modalOnboarding'), 450);

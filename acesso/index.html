@@ -273,7 +273,7 @@
 
       <div class="result-actions">
         <button class="btn btn-green" id="newSearchBtn" type="button">Nova busca</button>
-        <button class="btn btn-outline" id="buyTokensBtn" type="button">Comprar tokens</button>
+        <button class="btn btn-outline" id="buyTokensBtn" type="button">Entrar na fila</button>
       </div>
 
       <p class="result-disclaimer">Análise gerada pela IA do ZapRadar a partir de sinais públicos do WhatsApp. Conversas e fotos podem ter mais de um envolvido.</p>
@@ -307,6 +307,8 @@
       <input class="field" id="onboardName" type="text" placeholder="Como podemos te chamar?" maxlength="40" required>
       <label class="field-label" for="onboardPhone">Seu WhatsApp</label>
       <input class="field" id="onboardPhone" type="tel" placeholder="(11) 99999-0000" maxlength="16" inputmode="numeric" required>
+      <label class="field-label" for="onboardEmail">Seu e-mail</label>
+      <input class="field" id="onboardEmail" type="email" placeholder="voce@email.com" maxlength="120" inputmode="email" autocomplete="email" required>
       <button class="btn btn-green btn-lg" type="submit">Ativar radar e ganhar 100 tokens</button>
     </form>
     <p class="modal-fine">Ao ativar você concorda com os <button class="link-btn" data-modal="terms" type="button">Termos</button> e a <button class="link-btn" data-modal="privacy" type="button">Política de Privacidade</button>.</p>
@@ -316,9 +318,9 @@
 <section class="modal" id="modalPaywall" role="dialog" aria-modal="true" aria-labelledby="paywallTitle" hidden>
   <div class="modal-sheet modal-wide">
     <button class="modal-close" data-close="modalPaywall" type="button" aria-label="Fechar">✕</button>
-    <span class="modal-kicker modal-kicker-red">Saldo insuficiente</span>
-    <h2 id="paywallTitle">Seu plano FREE atingiu o limite</h2>
-    <p class="modal-sub" id="paywallSub">Você usou os 100 tokens de boas-vindas. Recarregue para continuar a análise deste registro.</p>
+    <span class="modal-kicker modal-kicker-red">Acesso gratuito encerrado</span>
+    <h2 id="paywallTitle">Seu acesso gratuito acabou</h2>
+    <p class="modal-sub" id="paywallSub">Sua análise continua na fila. Entre na lista de liberação e o saldo é renovado quando uma vaga abrir.</p>
 
     <div class="balance-meter">
       <div class="balance-meter-top"><span>Saldo atual</span><strong id="paywallBalance">0 tokens</strong></div>
@@ -326,43 +328,30 @@
       <div class="balance-meter-foot"><span id="paywallNeed">Faltam 45 tokens</span><span>100 / 100 usados</span></div>
     </div>
 
-    <div class="pack-list" id="packList"></div>
-
-    <div id="payEmailRow" hidden>
-      <label class="field-label" for="payEmail">E-mail para o recibo</label>
-      <input class="field field-sm" id="payEmail" type="email" inputmode="email" placeholder="voce@email.com" aria-label="E-mail para o recibo" autocomplete="email">
-    </div>
-
-    <div class="coupon-row">
-      <input class="field field-sm" id="couponInput" type="text" placeholder="Cupom de desconto" maxlength="12" aria-label="Cupom de desconto">
+    <div class="pack-list" id="packList" hidden></div>
+    <div class="coupon-row" hidden>
+      <input class="field field-sm" id="couponInput" type="text" placeholder="Cupom de desconto" maxlength="12">
       <button class="btn btn-ghost btn-sm" id="couponBtn" type="button">Aplicar</button>
     </div>
 
-    <button class="btn btn-green btn-lg" id="paywallBuyBtn" type="button">Pagar com PIX</button>
-    <div class="trust-row">
-      <span>🔒 Ambiente seguro</span>
-      <span>⚡ Liberação imediata</span>
-      <span>↩ 7 dias de garantia</span>
+    <div class="waitlist" id="waitlistBox">
+      <div class="wl-head"><span class="wl-dot"></span><strong id="wlTitle">Fila de liberação</strong><span class="wl-badge" id="wlBadge">aberta</span></div>
+      <p class="wl-text" id="wlText">Seu acesso gratuito terminou. Entre na fila: quando uma vaga abrir, seu saldo é renovado e você continua de onde parou.</p>
+      <div class="wl-status" id="wlStatus" hidden>
+        <div class="wl-row"><span>Sua posição</span><strong id="wlPos">—</strong></div>
+        <div class="wl-meter"><i id="wlFill"></i></div>
+        <div class="wl-row wl-foot"><span id="wlEta">Previsão —</span><span id="wlAhead">—</span></div>
+      </div>
+      <button class="btn btn-green btn-lg" id="wlBtn" type="button">Entrar na fila de liberação</button>
+      <div class="wl-perks">
+        <button class="btn btn-ghost btn-sm" id="wlRef" type="button">Indicar e ganhar 75</button>
+        <button class="btn btn-ghost btn-sm" id="wlBonus" type="button">Bônus diário +10</button>
+      </div>
     </div>
-  </div>
-</section>
-
-<section class="modal" id="modalPerfectPay" role="dialog" aria-modal="true" aria-labelledby="ppTitle" hidden>
-  <div class="modal-sheet">
-    <button class="modal-close" data-close="modalPerfectPay" type="button" aria-label="Fechar">✕</button>
-    <span class="modal-kicker">Pagamento seguro</span>
-    <h2 id="ppTitle">Finalizar compra</h2>
-    <div class="checkout-summary">
-      <span id="ppPack">300 tokens</span>
-      <strong id="ppPrice">R$ 19,90</strong>
-    </div>
-    <div id="perfectElement" class="pp-element"></div>
-    <button class="btn btn-green btn-lg" id="ppPayBtn" type="button">Pagar agora</button>
-    <p class="pp-message" id="ppMessage"></p>
     <div class="trust-row">
-      <span>🔒 PerfectPay</span>
-      <span>⚡ Liberação imediata</span>
-      <span>↩ 7 dias de garantia</span>
+      <span>🔒 Sem cartão</span>
+      <span>⚡ Liberação por vaga</span>
+      <span>🎁 Bônus enquanto espera</span>
     </div>
   </div>
 </section>
