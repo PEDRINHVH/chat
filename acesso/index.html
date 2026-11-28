@@ -279,6 +279,43 @@
       <p class="result-disclaimer">Análise gerada pela IA do ZapRadar a partir de sinais públicos do WhatsApp. Conversas e fotos podem ter mais de um envolvido.</p>
     </section>
 
+
+    <section class="screen wa" id="screenWhats" hidden>
+      <div class="wa-status"><span id="waClock">--:--</span><span>▮▮▮ ᯤ ▰</span></div>
+      <div class="wa-top">
+        <button class="wa-icon" id="waBackList" type="button" aria-label="Voltar">←</button>
+        <strong>WhatsApp</strong>
+        <div class="wa-top-actions">
+          <span class="wa-icon">⌕</span><span class="wa-icon">⋮</span>
+        </div>
+      </div>
+      <div class="wa-tabs">
+        <span class="on">Conversas <b>9</b></span><span>Status</span><span>Chamadas</span><span>Comunidades</span>
+      </div>
+      <div class="wa-search"><span>⌕</span><span>Pesquisar</span></div>
+      <div class="wa-banner"><span class="wa-live-dot"></span>Espelhamento ativo · <b id="waNumber">—</b></div>
+      <div class="wa-list" id="waChatList"></div>
+      <button class="wa-fab" type="button" aria-label="Nova conversa">✎</button>
+    </section>
+
+    <section class="screen wachat" id="screenWachat" hidden>
+      <div class="wa-chat-bg">
+        <div class="wa-status"><span id="waChatClock">--:--</span><span>▮▮▮ ᯤ ▰</span></div>
+        <div class="wa-chat-top">
+          <button class="wa-icon" id="waBackChat" type="button" aria-label="Voltar">←</button>
+          <div class="wa-chat-avatar"><img src="/assets/user.jpeg" alt=""></div>
+          <div class="wa-chat-who"><strong>Amigo</strong><span>online</span></div>
+          <div class="wa-top-actions"><span class="wa-icon">▷</span><span class="wa-icon">☎</span><span class="wa-icon">⋮</span></div>
+        </div>
+        <div class="wa-msgs" id="waMessages"></div>
+        <div class="wa-input">
+          <span class="wa-emoji">☺</span>
+          <span class="wa-field">Mensagem</span>
+          <span class="wa-emoji">📎</span>
+          <span class="wa-mic">🎤</span>
+        </div>
+      </div>
+    </section>
   </main>
 
   <nav class="tabbar" aria-label="Navegação">

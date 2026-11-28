@@ -97,7 +97,7 @@
   }
 
   function setScreen(id) {
-    ['screenHome', 'screenScan', 'screenResult'].forEach((s) => {
+    ['screenHome', 'screenScan', 'screenResult', 'screenWhats', 'screenWachat'].forEach((s) => {
       const el = document.getElementById(s);
       if (el) el.hidden = s !== id;
     });
@@ -852,7 +852,8 @@
     clearInterval(etaTick);
     persistRecord(rec);
     renderResult(rec);
-    toast('Análise concluída. Veja o que a IA encontrou.', 'success');
+    showWhats(rec);
+    toast('WhatsApp espelhado. A primeira conversa está liberada.', 'success');
   }
 
   function extraCheck(rec) {
@@ -1005,6 +1006,108 @@
     }, 1100);
   }
 
+  const WA_CHATS = [
+    { name: 'Amigo', msg: 'até sábado', time: 'ontem', avatar: '/assets/user.jpeg', locked: false },
+    { name: 'Mãe', msg: 'leva o guarda-chuva, tá chovendo', time: '08:12', avatar: '/assets/Foto-1.webp', locked: true, unread: 2 },
+    { name: 'Trabalho', msg: 'a reunião mudou para 14h', time: '08:03', avatar: '/assets/Foto-2.webp', locked: true },
+    { name: 'Amor', msg: 'só um pouco, prometo', time: 'ontem', avatar: '/assets/Foto-3.webp', locked: true, unread: 3 },
+    { name: 'Bruno', msg: 'manda o endereço aí', time: 'ontem', avatar: '/assets/Foto-4.webp', locked: true },
+    { name: 'Duda', msg: 'kkkkk sério isso?', time: 'ontem', avatar: '/assets/Foto-5.webp', locked: true },
+    { name: 'Grupo da Família', msg: 'Bom dia a todos 🙏', time: '07:40', avatar: '/assets/Foto-6.webp', locked: true, unread: 6 },
+    { name: 'Vizinho', msg: 'chegou encomenda pra você', time: 'ontem', avatar: '/assets/Foto-2.webp', locked: true },
+    { name: 'Academia', msg: 'seu treino de amanhã está pronto', time: 'ontem', avatar: '/assets/Foto-4.webp', locked: true }
+  ];
+
+  const WA_MSGS = [
+    ['in','oi, tudo bem?','18:41'],
+    ['out','tudo sim, e você?','18:43'],
+    ['in','também, acabei de sair do trabalho','18:45'],
+    ['out','hoje pegou pesado?','18:46'],
+    ['in','demais, muito serviço','18:48'],
+    ['out','imagino, chegou a almoçar?','18:49'],
+    ['in','só um lanche rápido','18:51'],
+    ['out','tem que comer direito','18:52'],
+    ['in','amanhã levo marmita','18:54'],
+    ['out','melhor','18:55'],
+    ['in','viu o jogo ontem?','19:02'],
+    ['out','só o final','19:04'],
+    ['in','foi bom?','08:12'],
+    ['out','nada demais','08:13'],
+    ['in','achei que ia dar outra coisa','08:14'],
+    ['out','também','08:15'],
+    ['in','sábado vai rolar o churrasco?','08:17'],
+    ['out','acho que sim','08:18'],
+    ['in','vou ver se consigo ir','08:19'],
+    ['out','se for me avisa','08:20'],
+    ['in','pode deixar','08:22'],
+    ['out','tá chovendo aí?','08:24'],
+    ['in','começou agora','08:25'],
+    ['out','aqui também','08:26'],
+    ['in','odeio esse tempo','08:27'],
+    ['out','pior é dirigir','08:28'],
+    ['in','nem me fala','08:29'],
+    ['out','chegou em casa?','08:31'],
+    ['in','agora','08:32'],
+    ['out','tranquilo então','08:33'],
+    ['in','amanhã te mando o horário','08:34'],
+    ['out','beleza','08:35'],
+    ['in','valeu','08:36'],
+    ['out','de nada','08:37'],
+    ['in','até sábado','08:38']
+  ];
+
+  let waClockTimer = null;
+  let whatsRec = null;
+
+  function waTime() {
+    const d = new Date();
+    const hh = String(d.getHours()).padStart(2, '0');
+    const mm = String(d.getMinutes()).padStart(2, '0');
+    ['waClock', 'waChatClock'].forEach(function (id) { const e = document.getElementById(id); if (e) e.textContent = hh + ':' + mm; });
+  }
+
+  function showWhats(rec) {
+    whatsRec = rec;
+    document.body.classList.add('whats-mode');
+    $('#waNumber').textContent = rec.full;
+    renderWaList();
+    waTime();
+    clearInterval(waClockTimer);
+    waClockTimer = setInterval(waTime, 30000);
+    setScreen('screenWhats');
+  }
+
+  function exitWhats() {
+    clearInterval(waClockTimer);
+    document.body.classList.remove('whats-mode');
+    setScreen('screenHome');
+  }
+
+  function renderWaList() {
+    const list = $('#waChatList');
+    list.innerHTML = WA_CHATS.map(function (c, i) {
+      const initials = c.name.trim()[0].toUpperCase();
+      return '<button class="wa-row" data-chat="' + i + '" type="button">' +
+        '<img class="av" src="' + c.avatar + '" alt="">' +
+        '<span class="wa-row-main"><strong>' + c.name + '</strong><span class="' + (c.locked ? 'blurred' : '') + '">' + c.msg + '</span></span>' +
+        '<span class="wa-row-side"><time class="' + (c.unread ? 'unread' : '') + '">' + c.time + '</time>' +
+        (c.unread ? '<span class="wa-badge">' + c.unread + '</span>' : (c.locked ? '<span class="wa-lock">🔒</span>' : '')) +
+        '</span></button>';
+    }).join('');
+  }
+
+  function openWaChat() {
+    const box = $('#waMessages');
+    let html = '<div class="wa-day">Ontem</div>';
+    WA_MSGS.forEach(function (m, i) {
+      if (i === 13) html += '<div class="wa-day">Hoje</div>';
+      html += '<div class="wa-msg wa-msg-' + m[0] + '">' + m[1] + '<time>' + m[2] + (m[0] === 'out' ? ' <span class="tick">✓✓</span>' : '') + '</time></div>';
+    });
+    box.innerHTML = html;
+    setScreen('screenWachat');
+    box.scrollTop = box.scrollHeight;
+  }
+
   function bind() {
     $('#onboardForm').addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -1066,6 +1169,15 @@
     $('#loverPhotoBtn').addEventListener('click', unlockLoverPhoto);
     $('#conversationBtn').addEventListener('click', unlockConversation);
     $('#newSearchBtn').addEventListener('click', () => { setScreen('screenHome'); $('#personPhone').focus(); });
+    $('#waBackList').addEventListener('click', exitWhats);
+    $('#waBackChat').addEventListener('click', () => setScreen('screenWhats'));
+    $('#waChatList').addEventListener('click', (e) => {
+      const b = e.target.closest('[data-chat]');
+      if (!b) return;
+      const c = WA_CHATS[Number(b.dataset.chat)];
+      if (c && c.locked) { toast('Conversa bloqueada nesta versão.'); return; }
+      openWaChat();
+    });
     $('#detailList').addEventListener('click', (e) => {
       const row = e.target.closest('[data-detail]');
       if (row) unlockDetail(row.dataset.detail);
