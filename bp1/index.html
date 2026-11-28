@@ -750,7 +750,7 @@ body {
     <div class="prog-track"><div class="prog-fill" id="prog-fill"></div></div>
     <p class="wait-text" id="ultra-title">Gerando o relatório agora mesmo…</p>
     <p class="spied-text" id="ultra-sub">Varredura em andamento neste número</p>
-    <a id="unlock-btn-topo" class="cta-btn unlock-link reveal inline" href="/try/cta" data-pos="topo">🔓 ACESSAR RELATÓRIO COMPLETO</a>
+    <a id="unlock-btn-topo" class="cta-btn unlock-link reveal inline checkout-link" href="https://go.perfectpay.com.br/PPU38CQI2OU" data-pos="topo">🔓 ACESSAR RELATÓRIO COMPLETO</a>
     <div class="redline" id="redline">
       <span class="ic">⚠️</span>
       <div><strong>Atenção:</strong> modo <strong>ultra processamento</strong> ativado em <em>potência máxima</em> para acelerar e finalizar o seu relatório com todas as provas concretas.</div>
@@ -794,7 +794,7 @@ body {
     <div>Se você <strong>fechar esta página</strong>, todos os dados encontrados serão <strong>excluídos permanentemente</strong> e você nunca vai descobrir a verdade.</div>
   </div>
 
-  <a id="unlock-btn" class="cta-btn unlock-link reveal" href="/try/cta" data-pos="principal">🔓 ACESSAR RELATÓRIO COMPLETO</a>
+  <a id="unlock-btn" class="cta-btn unlock-link reveal checkout-link" href="https://go.perfectpay.com.br/PPU38CQI2OU" data-pos="principal">🔓 ACESSAR RELATÓRIO COMPLETO</a>
 
   <div class="ssl-badge reveal" id="ssl">
     <div class="ssl-icon">🔐</div>
@@ -855,7 +855,7 @@ body {
   }
 
   function atualizarLinks() {
-    var destino = new URL('/try/cta', window.location.href);
+    var destino = new URL('https://go.perfectpay.com.br/PPU38CQI2OU');
     params.forEach(function (v, k) { if (k !== 'phone' && k !== 'zr') destino.searchParams.set(k, v); });
     if (phone) destino.searchParams.set('phone', phone);
     document.querySelectorAll('a.unlock-link').forEach(function (a) { a.href = destino.toString(); });
