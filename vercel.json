@@ -1,6 +1,14 @@
 {
   "rewrites": [
     {
+      "source": "/bp1",
+      "destination": "/bp1/index.html"
+    },
+    {
+      "source": "/bp1/",
+      "destination": "/bp1/index.html"
+    },
+    {
       "source": "/acesso",
       "destination": "/acesso/index.html"
     },
