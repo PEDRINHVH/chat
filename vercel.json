@@ -40,5 +40,7 @@
       "source": "/_f/e",
       "destination": "/api/fe"
     }
-  ]
+  ],
+  "buildCommand": "echo build-ok",
+  "outputDirectory": "."
 }
